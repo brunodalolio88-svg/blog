@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog Kynto | Tecnologia e Inovação</title>
+    <title>Blog Kynto | Tecnologia</title>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1879074686301515" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -11,24 +12,19 @@
         :root { --dark: #0f172a; --green: #02BF93; --bg: #F1F5F9; --card-bg: #ffffff; }
         body { font-family: 'Outfit', sans-serif; background: var(--bg); margin: 0; color: #334155; display: flex; flex-direction: column; min-height: 100vh; }
         
-        /* HEADER */
         header { background: #fff; padding: 20px 0; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 20px rgba(0,0,0,0.02); }
         .container { max-width: 1140px; margin: 0 auto; padding: 0 20px; }
         .nav { display: flex; justify-content: space-between; align-items: center; }
         .logo { font-size: 24px; font-weight: 800; color: var(--dark); text-decoration: none; letter-spacing: -1px; }
-        .logo span { color: var(--green); }
         .btn-site { color: var(--dark); text-decoration: none; font-weight: 600; font-size: 14px; border: 2px solid var(--dark); padding: 8px 20px; border-radius: 50px; transition: 0.3s; }
         .btn-site:hover { background: var(--dark); color: #fff; }
 
-        /* HERO */
         .hero { text-align: center; padding: 80px 0; background: linear-gradient(to bottom, #fff, #F1F5F9); }
         .hero h1 { font-size: 52px; font-weight: 800; color: var(--dark); margin: 0 0 15px 0; letter-spacing: -1.5px; }
         .hero p { font-size: 18px; color: #64748b; max-width: 600px; margin: 0 auto; }
 
-        /* GRID */
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 30px; margin-bottom: 80px; }
-        
-        .card { background: var(--card-bg); border-radius: 12px; overflow: hidden; transition: 0.3s; display: flex; flex-direction: column; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px rgba(0,0,0,0.02); text-decoration: none; color: inherit; height: 100%; }
+        .card { background: var(--card-bg); border-radius: 12px; overflow: hidden; transition: 0.3s; display: flex; flex-direction: column; border: 1px solid #e2e8f0; text-decoration: none; color: inherit; height: 100%; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
         .card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.08); border-color: var(--green); }
         
         .card-img { width: 100%; height: 200px; object-fit: cover; background: #f1f5f9; }
@@ -40,15 +36,9 @@
         .read-more i { transition: 0.3s; }
         .card:hover .read-more i { transform: translateX(5px); color: var(--green); }
 
-        /* ADSENSE PLACEHOLDER */
         .ad-banner { background: #e2e8f0; height: 100px; margin: 40px auto; max-width: 728px; display: flex; align-items: center; justify-content: center; color: #94a3b8; border-radius: 8px; font-size: 12px; }
-
-        /* FOOTER */
         footer { background: var(--dark); color: #94a3b8; padding: 60px 0; margin-top: auto; border-top: 4px solid var(--green); text-align: center; }
         footer a { color: #fff; text-decoration: none; margin: 0 10px; font-weight: 600; }
-        footer p { margin-top: 20px; font-size: 14px; opacity: 0.7; }
-
-        .loader { text-align: center; color: #94a3b8; padding: 40px; grid-column: 1/-1; }
     </style>
 </head>
 <body>
@@ -63,33 +53,27 @@
     <div class="hero">
         <div class="container">
             <h1>Notícias & Tecnologia</h1>
-            <p>Mantenha-se atualizado com as últimas tendências e dicas de TI.</p>
+            <p>Fique por dentro das novidades do mundo Tech.</p>
         </div>
     </div>
 
     <div class="container">
-        <div class="ad-banner">Espaço Publicitário (AdSense)</div>
+        <div class="ad-banner">Publicidade Google (AdSense)</div>
     </div>
 
     <div class="container">
         <div id="posts" class="grid">
-            <div class="loader"><i class="fa-solid fa-circle-notch fa-spin"></i> Carregando...</div>
+            <div style="text-align:center;width:100%;color:#999;grid-column:1/-1;padding:40px;">Carregando...</div>
         </div>
     </div>
 
     <footer>
         <div class="container">
-            <div style="margin-bottom: 20px;">
-                <a href="https://kynto.com.br">Home</a>
-                <a href="#">Sobre</a>
-                <a href="#">Contato</a>
-            </div>
-            <p>&copy; 2026 Kynto Soluções. Todos os direitos reservados.</p>
+            <p>&copy; 2026 Kynto Soluções.</p>
         </div>
     </footer>
 
     <script>
-        // CONFIGURAÇÃO
         const CONFIG = {
             USER: 'brunodalolio88-svg', 
             REPO: 'blog',       
@@ -97,31 +81,20 @@
         };
 
         fetch(`https://raw.githubusercontent.com/${CONFIG.USER}/${CONFIG.REPO}/main/${CONFIG.DB_FILE}`)
-            .then(res => {
-                if (!res.ok) throw new Error("Falha");
-                return res.text();
-            })
+            .then(r => r.text())
             .then(text => {
                 const posts = JSON.parse(text);
                 const grid = document.getElementById('posts');
                 grid.innerHTML = '';
                 
-                const published = posts.filter(p => p.status === 'published');
+                const pub = posts.filter(p => p.status === 'published');
+                if(pub.length === 0) { grid.innerHTML = '<p style="text-align:center;width:100%">Nenhum post.</p>'; return; }
 
-                if(published.length === 0) {
-                    grid.innerHTML = '<p style="text-align:center; width:100%; color:#64748b">Nenhum post encontrado.</p>';
-                    return;
-                }
-
-                published.forEach(p => {
-                    // Usa imagem ou um placeholder cinza se não tiver
-                    const imgHtml = p.image 
-                        ? `<img src="${p.image}" class="card-img" alt="${p.title}">` 
-                        : `<div class="card-img" style="display:flex;align-items:center;justify-content:center;color:#cbd5e1"><i class="fa-solid fa-image fa-2x"></i></div>`;
-
+                pub.forEach(p => {
+                    const img = p.image ? `<img src="${p.image}" class="card-img">` : `<div class="card-img" style="display:flex;align-items:center;justify-content:center;color:#cbd5e1"><i class="fa-solid fa-image fa-2x"></i></div>`;
                     grid.innerHTML += `
                         <a href="posts/${p.slug}.html" class="card">
-                            ${imgHtml}
+                            ${img}
                             <div class="card-body">
                                 <span class="date">${p.date}</span>
                                 <h2 class="title">${p.title}</h2>
@@ -132,9 +105,7 @@
                     `;
                 });
             })
-            .catch(e => {
-                document.getElementById('posts').innerHTML = '<p class="loader" style="color:red">Erro ao carregar notícias. Verifique a configuração.</p>';
-            });
+            .catch(e => document.getElementById('posts').innerHTML = '<p style="color:red;text-align:center">Erro ao carregar.</p>');
     </script>
 
 </body>
