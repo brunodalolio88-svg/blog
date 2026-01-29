@@ -3,102 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kynto Admin | Editor Pro</title>
+    <title>Kynto Admin | Editor Inteligente</title>
+    
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     
     <style>
-        /* RESET E CORES GERAIS */
         :root { --bg: #0f172a; --panel: #1e293b; --primary: #02BF93; --text: #f8fafc; --border: #334155; }
         body { margin:0; padding:0; font-family:'Outfit', sans-serif; background:var(--bg); color:var(--text); height:100vh; overflow:hidden; }
         
         /* LOGIN */
         #login-screen { position:fixed; top:0; left:0; width:100%; height:100%; background:var(--bg); z-index:999; display:flex; align-items:center; justify-content:center; flex-direction:column; }
-        .box { background:var(--panel); padding:40px; border-radius:12px; width:100%; max-width:380px; text-align:center; border:1px solid var(--border); box-shadow:0 20px 60px rgba(0,0,0,0.5); }
-        .box h2 { margin:0 0 20px 0; color:var(--primary); font-size:24px; }
-        .box input { width:100%; padding:14px; margin-bottom:15px; background:var(--bg); border:1px solid var(--border); color:#fff; border-radius:6px; outline:none; }
-        .box button { width:100%; padding:14px; background:var(--primary); color:#0f172a; font-weight:800; border:none; border-radius:6px; cursor:pointer; font-size:14px; transition:0.3s; }
-        .box button:hover { transform:translateY(-2px); filter:brightness(1.1); }
-        .link-reset { margin-top:20px; font-size:12px; color:#64748b; cursor:pointer; text-decoration:underline; }
+        .box { background:var(--panel); padding:40px; border-radius:12px; width:100%; max-width:350px; text-align:center; border:1px solid var(--border); box-shadow:0 20px 50px rgba(0,0,0,0.5); }
+        .box input { width:100%; padding:12px; margin:20px 0; background:var(--bg); border:1px solid var(--border); color:#fff; border-radius:6px; outline:none; }
+        .box button { width:100%; padding:12px; background:var(--primary); color:#000; font-weight:800; border:none; border-radius:6px; cursor:pointer; }
+        .reset { margin-top:15px; font-size:12px; color:#64748b; cursor:pointer; text-decoration:underline; }
 
-        /* LAYOUT DO PAINEL */
+        /* PAINEL */
         #app { display:flex; width:100%; height:100%; visibility:hidden; opacity:0; transition:0.5s; }
         #app.visible { visibility:visible; opacity:1; }
 
-        .sidebar { width:280px; background:var(--panel); border-right:1px solid var(--border); padding:25px; display:flex; flex-direction:column; }
-        .brand { font-size:22px; font-weight:800; color:#fff; display:flex; align-items:center; gap:10px; margin-bottom:30px; }
-        .brand span { color:var(--primary); }
-        .btn-new { background:var(--primary); color:#0f172a; border:none; padding:12px; border-radius:8px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; width:100%; }
+        .sidebar { width:280px; background:var(--panel); border-right:1px solid var(--border); padding:20px; display:flex; flex-direction:column; }
+        .brand { font-size:20px; font-weight:800; color:#fff; margin-bottom:20px; display:flex; align-items:center; gap:10px; }
+        .btn-new { background:var(--primary); color:#000; border:none; padding:12px; border-radius:6px; font-weight:700; cursor:pointer; width:100%; }
         
-        .post-list { flex:1; overflow-y:auto; margin-top:25px; }
-        .post-item { padding:15px; border-radius:8px; cursor:pointer; margin-bottom:8px; background:rgba(255,255,255,0.02); transition:0.2s; border:1px solid transparent; }
-        .post-item:hover { background:rgba(255,255,255,0.05); }
-        .post-item.active { background:rgba(2, 191, 147, 0.1); border-color:var(--primary); }
-        .post-title { font-size:14px; font-weight:600; display:block; margin-bottom:5px; }
-        .post-status { font-size:11px; color:var(--text-muted); }
+        .post-list { flex:1; overflow-y:auto; margin-top:20px; }
+        .post-item { padding:12px; margin-bottom:5px; border-radius:6px; cursor:pointer; transition:0.2s; background:rgba(255,255,255,0.03); }
+        .post-item:hover { background:rgba(255,255,255,0.08); }
+        .post-item.active { background:rgba(2, 191, 147, 0.15); border:1px solid var(--primary); }
+        .post-title { font-size:13px; font-weight:600; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 
-        .content { flex:1; background:#f1f5f9; display:flex; flex-direction:column; position:relative; }
-        
-        /* TOPO */
-        .toolbar { padding:0 30px; height:70px; background:#fff; border-bottom:1px solid #e2e8f0; display:flex; justify-content:flex-end; align-items:center; gap:10px; }
-        .btn { padding:10px 20px; border-radius:6px; font-size:13px; font-weight:700; cursor:pointer; border:1px solid #e2e8f0; background:#fff; color:#334155; transition:0.2s; }
-        .btn:hover { background:#f8fafc; }
-        .btn-green { background:var(--primary); color:#0f172a; border:none; }
-        .btn-green:hover { filter:brightness(1.05); }
-        .btn-red { color:#ef4444; border-color:rgba(239,68,68,0.2); }
-        .btn-red:hover { background:#fef2f2; }
+        .content { flex:1; background:#f1f5f9; display:flex; flex-direction:column; }
+        .topbar { padding:0 30px; height:60px; background:#fff; border-bottom:1px solid #ddd; display:flex; justify-content:flex-end; align-items:center; gap:10px; }
+        .btn { padding:8px 20px; border-radius:6px; font-size:13px; font-weight:700; cursor:pointer; border:1px solid #ddd; background:#fff; color:#333; }
+        .btn-pub { background:var(--primary); border:none; color:#000; }
+        .btn-del { color:red; border-color:#fee2e2; }
 
-        /* ÁREA DO EDITOR */
+        /* EDITOR */
         .editor-area { flex:1; overflow-y:auto; padding:40px; display:flex; justify-content:center; }
-        .paper { background:#fff; width:100%; max-width:850px; min-height:100%; box-shadow:0 10px 40px rgba(0,0,0,0.05); border-radius:8px; display:flex; flex-direction:column; }
+        .paper { background:#fff; width:100%; max-width:800px; min-height:100%; box-shadow:0 5px 30px rgba(0,0,0,0.05); border-radius:8px; display:flex; flex-direction:column; }
         
-        .meta-area { padding:40px 40px 10px; }
-        .input-title { width:100%; font-size:36px; font-weight:800; border:none; outline:none; color:#0f172a; font-family:'Outfit'; margin-bottom:20px; }
-        .input-title::placeholder { color:#cbd5e1; }
-        .input-img { width:100%; padding:12px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px; font-size:13px; color:#334155; outline:none; }
-        .input-img:focus { border-color:var(--primary); background:#fff; }
-
-        /* --- CORREÇÕES DO EDITOR (O IMPORTANTE ESTÁ AQUI) --- */
-        .ql-toolbar { border:none!important; border-bottom:1px solid #f1f5f9!important; padding:15px 40px!important; position:sticky; top:0; background:#fff; z-index:10; }
+        .meta { padding:30px 40px 0; }
+        .input-title { width:100%; font-size:32px; font-weight:800; border:none; outline:none; color:#0f172a; font-family:'Outfit'; margin-bottom:10px; }
+        
+        /* QUILL CUSTOMIZADO */
+        .ql-toolbar { border:none!important; border-bottom:1px solid #eee!important; padding:15px 40px!important; background:#fff; position:sticky; top:0; z-index:10; }
         .ql-container { border:none!important; font-size:18px; font-family:'Merriweather', serif; flex:1; }
-        
-        /* AQUI ESTÁ A CORREÇÃO DA COR DO TEXTO */
-        .ql-editor { padding:40px; color:#334155; line-height:1.8; }
-        .ql-editor p { margin-bottom:15px; }
-        .ql-editor img { max-width:100%; border-radius:8px; margin:20px 0; box-shadow:0 5px 15px rgba(0,0,0,0.1); }
+        .ql-editor { padding:40px; color:#333; line-height:1.8; } /* Texto Preto */
+        .ql-editor img { max-width:100%; border-radius:5px; margin:20px 0; display:block; }
     </style>
 </head>
 <body>
 
     <div id="login-screen">
         <div class="box">
-            <h2><i class="fa-solid fa-lock"></i> Acesso Seguro</h2>
-            <input type="password" id="tokenInput" placeholder="Cole seu Token GitHub aqui">
-            <button id="btnLogin">ENTRAR NO SISTEMA</button>
-            <div class="link-reset" id="btnReset">Limpar senha salva</div>
+            <h2 style="color:#02BF93">ADMINISTRADOR</h2>
+            <input type="password" id="tokenInput" placeholder="Token GitHub">
+            <button id="btnLogin">ACESSAR</button>
+            <div class="reset" id="btnReset">Limpar senha</div>
         </div>
     </div>
 
     <div id="app">
         <div class="sidebar">
-            <div class="brand"><i class="fa-solid fa-cube"></i> KYNTO<span>CMS</span></div>
-            <button class="btn-new" onclick="newPost()"><i class="fa-solid fa-plus"></i> Novo Artigo</button>
+            <div class="brand"><i class="fa-solid fa-cube"></i> KYNTO</div>
+            <button class="btn-new" onclick="newPost()">+ Novo Artigo</button>
             <div class="post-list" id="postList">Carregando...</div>
         </div>
         
         <div class="content">
             <div class="topbar">
-                <button class="btn btn-red" onclick="deletePost()" id="btnDel" style="display:none"><i class="fa-solid fa-trash"></i> Excluir</button>
-                <button class="btn" onclick="save('draft')"><i class="fa-regular fa-floppy-disk"></i> Rascunho</button>
-                <button class="btn btn-green" onclick="save('published')"><i class="fa-solid fa-rocket"></i> Publicar</button>
+                <button class="btn btn-del" onclick="deletePost()" id="btnDel" style="display:none">Excluir</button>
+                <button class="btn" onclick="save('draft')">Rascunho</button>
+                <button class="btn btn-pub" onclick="save('published')">Publicar</button>
             </div>
             
             <div class="editor-area">
                 <div class="paper">
-                    <div class="meta-area">
-                        <input type="text" id="postTitle" class="input-title" placeholder="Digite o Título do Post...">
-                        <input type="text" id="postImg" class="input-img" placeholder="Link da Imagem de Capa (http://...)">
+                    <div class="meta">
+                        <input type="text" id="postTitle" class="input-title" placeholder="Digite o Título...">
                     </div>
                     <div id="editor"></div>
                 </div>
@@ -108,32 +92,30 @@
 
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <script>
-        // === 1. SEUS DADOS AQUI ===
+        // CONFIGURAÇÃO
         const CONFIG = {
             USER: 'brunodalolio88-svg', 
             REPO: 'blog',       
             DB_FILE: 'db.json'
         };
 
-        // Variáveis
         let posts = [], sha = null, activeIdx = -1, token = localStorage.getItem('gh_token') || '', quill;
 
-        // === 2. INICIAR (Seguro) ===
+        // INICIALIZAÇÃO
         window.addEventListener('DOMContentLoaded', () => {
-            // Editor com Ferramentas de COR e ALINHAMENTO
             try {
                 quill = new Quill('#editor', {
                     theme: 'snow',
-                    placeholder: 'Comece a escrever...',
+                    placeholder: 'Escreva aqui...',
                     modules: {
                         toolbar: [
                             [{ 'header': [2, 3, false] }],
-                            ['bold', 'italic', 'underline', 'strike'],        // Negrito, Italico...
-                            [{ 'color': [] }, { 'background': [] }],          // <--- CORES AQUI
-                            [{ 'align': [] }],                                // <--- ALINHAMENTO AQUI
+                            ['bold', 'italic', 'underline', 'strike'],
+                            [{ 'align': [] }],  // <--- Alinhamento
+                            [{ 'color': [] }, { 'background': [] }], // <--- Cores
                             [{ 'list': 'ordered'}, { 'list': 'bullet' }],
                             ['link', 'image', 'video'],
-                            ['clean']                                         // Limpar formatação
+                            ['clean']
                         ]
                     }
                 });
@@ -160,7 +142,7 @@
             loadDB();
         }
 
-        // === 3. CARREGAR DADOS ===
+        // BANCO DE DADOS
         async function loadDB() {
             const list = document.getElementById('postList');
             try {
@@ -173,29 +155,23 @@
                 const data = await res.json();
                 sha = data.sha;
                 
-                // Decode Seguro (UTF-8)
                 try {
                     const raw = atob(data.content);
                     posts = JSON.parse(decodeURIComponent(escape(raw)));
-                } catch(e) {
-                    posts = JSON.parse(atob(data.content));
-                }
+                } catch(e) { posts = JSON.parse(atob(data.content)); }
                 renderList();
-            } catch(e) {
-                list.innerHTML = `<p style="color:#ef4444;padding:20px;font-size:12px">${e.message}</p>`;
-            }
+            } catch(e) { list.innerHTML = `<p style="color:red;padding:20px;font-size:12px">${e.message}</p>`; }
         }
 
         function renderList() {
             const list = document.getElementById('postList'); list.innerHTML = '';
-            if(!posts.length) { list.innerHTML = '<p style="padding:20px;color:#64748b;font-size:12px;text-align:center">Nenhum post.</p>'; return; }
+            if(!posts.length) { list.innerHTML = '<p style="padding:20px;color:#999;font-size:12px;text-align:center">Nenhum post.</p>'; return; }
 
             posts.forEach((p, i) => {
                 const isPub = p.status === 'published';
-                list.innerHTML += `
-                <div class="post-item ${i===activeIdx?'active':''}" onclick="openPost(${i})">
+                list.innerHTML += `<div class="post-item ${i===activeIdx?'active':''}" onclick="openPost(${i})">
                     <span class="post-title">${p.title}</span>
-                    <span class="post-status" style="color:${isPub?'#02BF93':'#f59e0b'}">● ${isPub?'No ar':'Rascunho'}</span>
+                    <span style="font-size:10px;color:${isPub?'#02BF93':'orange'}">● ${isPub?'No ar':'Rascunho'}</span>
                 </div>`;
             });
         }
@@ -203,7 +179,6 @@
         function newPost() {
             activeIdx = -1;
             document.getElementById('postTitle').value = '';
-            document.getElementById('postImg').value = '';
             quill.root.innerHTML = '';
             document.getElementById('btnDel').style.display = 'none';
             renderList();
@@ -213,31 +188,39 @@
             activeIdx = i;
             const p = posts[i];
             document.getElementById('postTitle').value = p.title;
-            document.getElementById('postImg').value = p.image || '';
             quill.root.innerHTML = p.content;
             document.getElementById('btnDel').style.display = 'block';
             renderList();
         }
 
-        // === 4. SALVAR ===
+        // SALVAR
         async function save(status) {
             const title = document.getElementById('postTitle').value;
             if(!title) return alert("Título obrigatório!");
 
             const slug = title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+            
+            // --- AUTO DETECTAR IMAGEM ---
+            const content = quill.root.innerHTML;
+            // Cria um elemento temporário para buscar a imagem
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = content;
+            const firstImg = tempDiv.querySelector('img');
+            const autoImage = firstImg ? firstImg.src : '';
+            // ----------------------------
+
             const postData = {
                 title, slug, status,
-                image: document.getElementById('postImg').value,
+                image: autoImage, // Salva a imagem encontrada para o Index usar
                 date: new Date().toLocaleDateString('pt-BR'),
-                snippet: quill.getText().substring(0, 100) + '...',
-                content: quill.root.innerHTML
+                snippet: quill.getText().substring(0, 120) + '...',
+                content: content
             };
 
             if(activeIdx > -1) posts[activeIdx] = postData;
             else { posts.unshift(postData); activeIdx = 0; }
 
             try {
-                // Encode UTF-8
                 const jsonStr = JSON.stringify(posts, null, 2);
                 const jsonB64 = btoa(unescape(encodeURIComponent(jsonStr)));
                 
@@ -267,19 +250,18 @@
                 if(c.ok) { const d = await c.json(); htmlSha = d.sha; }
             } catch(e) {}
 
-            const imgHtml = post.image ? `<img src="${post.image}" class="cover">` : '';
+            // Template SEM imagem de capa duplicada no topo
             const tpl = `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>${post.title}</title>
             <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
             <style>
                 body{font-family:'Merriweather',serif;margin:0;color:#334;background:#f8fafc;line-height:1.8}
                 header{background:#0f172a;padding:20px;text-align:center;border-bottom:4px solid #02BF93}
                 .logo{color:#fff;font-family:'Outfit',sans-serif;font-weight:800;font-size:24px;text-decoration:none}
-                .container{max-width:800px;margin:0 auto;padding:0 20px}
-                .cover{width:100%;height:400px;object-fit:cover;border-radius:12px;margin-top:40px;box-shadow:0 10px 30px rgba(0,0,0,0.1)}
-                .box{background:#fff;padding:40px;border-radius:12px;margin-top:-40px;position:relative;box-shadow:0 10px 40px rgba(0,0,0,0.05);z-index:10;margin-bottom:40px}
-                h1{font-family:'Outfit',sans-serif;font-size:38px;color:#0f172a;line-height:1.2;margin-bottom:10px}
+                .container{max-width:800px;margin:40px auto;padding:0 20px}
+                .box{background:#fff;padding:60px 40px;border-radius:12px;box-shadow:0 10px 40px rgba(0,0,0,0.05);margin-bottom:40px}
+                h1{font-family:'Outfit',sans-serif;font-size:42px;color:#0f172a;line-height:1.2;margin-bottom:10px}
                 .meta{font-family:'Outfit',sans-serif;color:#64748b;font-size:13px;display:block;margin-bottom:30px;padding-bottom:20px;border-bottom:1px solid #eee}
-                .content img{max-width:100%;border-radius:8px}
+                .content img{max-width:100%;border-radius:8px;margin:20px 0}
                 .content blockquote{border-left:4px solid #02BF93;margin:20px 0;padding:15px;background:#f0fdf9;font-style:italic}
                 .ad{background:#f1f5f9;padding:20px;text-align:center;color:#94a3b8;font-size:12px;margin:40px 0;border:1px dashed #cbd5e1;border-radius:8px}
                 .related{margin-top:60px;padding-top:40px;border-top:1px solid #eee}
@@ -289,9 +271,11 @@
                 footer{background:#0f172a;color:#94a3b8;text-align:center;padding:40px;margin-top:auto}
             </style></head><body>
             <header><a href="../index.html" class="logo">KYNTO<span style="color:#02BF93">BLOG</span></a></header>
-            <div class="container">${imgHtml}<article class="box" style="${!post.image?'margin-top:40px':''}">
+            <div class="container"><article class="box">
                 <h1>${post.title}</h1><span class="meta">${post.date}</span>
-                <div class="ad">Publicidade</div><div class="content">${post.content}</div><div class="ad">Publicidade</div>
+                <div class="ad">Espaço Google Ads</div>
+                <div class="content">${post.content}</div>
+                <div class="ad">Espaço Google Ads</div>
                 <div class="related"><h3>Leia também</h3><div id="rel">...</div></div>
             </article></div><footer>© 2026 Kynto Soluções</footer>
             <script>fetch('../db.json').then(r=>r.json()).then(p=>{
