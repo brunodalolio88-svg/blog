@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kynto Admin | Painel de Controle</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-dark: #0f172a; --bg-sidebar: #1e293b; --primary: #02BF93;
+            --text-main: #f8fafc; --text-muted: #94a3b8; --border: #334155;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background-color: var(--bg-dark); color: var(--text-main); height: 100vh; display: flex; overflow: hidden; }
+
+        /* TELA DE LOGIN */
+        #login-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0f172a; z-index: 9999; display: flex; align-items: center; justify-content: center; }
+        .login-box { background: #1e293b; padding: 40px; border-radius: 12px; width: 100%; max-width: 400px; text-align: center; border: 1px solid var(--border); }
+        .login-box h2 { margin-bottom: 20px; color: #fff; }
+        .login-box input { width: 100%; padding: 12px; background: #0f172a; border: 1px solid var(--border); color: #fff; border-radius: 6px; margin-bottom: 15px; outline: none; }
+        .login-box button { width: 100%; padding: 12px; background: var(--primary); color: #0f172a; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; }
+
+        /* LAYOUT PRINCIPAL */
+        #app { display: flex; width: 100%; height: 100%; opacity: 0; transition: opacity 0.5s; pointer-events: none; }
+        #app.logged-in { opacity: 1; pointer-events: all; }
+
+        /* SIDEBAR */
+        .sidebar { width: 300px; background: var(--bg-sidebar); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px; }
+        .brand { font-size: 20px; font-weight: 800; margin-bottom: 20px; color: #fff; display: flex; justify-content: space-between; align-items: center; }
+        .brand span { color: var(--primary); }
+        .btn-new { background: var(--primary); color: #0f172a; border: none; padding: 10px; border-radius: 6px; width: 100%; cursor: pointer; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        
+        .post-list { flex: 1; overflow-y: auto; }
+        .post-item { padding: 12px; border-radius: 6px; cursor: pointer; margin-bottom: 5px; border: 1px solid transparent; transition: 0.2s; }
+        .post-item:hover { background: rgba(255,255,255,0.05); }
+        .post-item.active { background: rgba(2, 191, 147, 0.1); border-color: var(--primary); }
+        .post-title { font-size: 14px; font-weight: 600; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .post-status { font-size: 10px; text-transform: uppercase; color: var(--text-muted); margin-top: 4px; display: block; }
+
+        /* EDITOR */
+        .main { flex: 1; display: flex; flex-direction: column; background: #f1f5f9; position: relative; }
+        .top-bar { height: 70px; background: #fff; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between; padding: 0 30px; }
+        
+        #postTitle { font-size: 20px; font-weight: 700; border: none; outline: none; width: 60%; color: #0f172a; background: transparent; }
+        #postTitle::placeholder { color: #94a3b8; }
+
+        .actions { display: flex; gap: 10px; }
+        .btn-action { padding: 10px 20px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; transition: 0.2s; }
+        .btn-draft { background: #e2e8f0; color: #475569; }
+        .btn-pub { background: var(--primary); color: #0f172a; }
+        .btn-del { background: transparent; color: #ef4444; font-size: 18px; padding: 10px; }
+
+        /* QUILL AJUSTES */
+        .editor-wrapper { flex: 1; overflow-y: auto; padding: 40px; display: flex; justify-content: center; }
+        .paper { width: 100%; max-width: 800px; background: #fff; min-height: 100%; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-radius: 8px; display: flex; flex-direction: column; }
+        .ql-toolbar { border: none !important; border-bottom: 1px solid #f1f5f9 !important; padding: 15px !important; background: #fff; border-radius: 8px 8px 0 0; }
+        .ql-container { border: none !important; font-size: 16px; color: #334155; flex: 1; }
+        .ql-editor { padding: 40px; }
+        .ql-editor img { max-width: 100%; border-radius: 8px; margin: 20px 0; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body>
+
+    <div id="login-screen">
+        <div class="login-box">
+            <h2>🔐 Acesso Kynto</h2>
+            <p style="color:#94a3b8; font-size:13px; margin-bottom:20px;">Digite seu Token do GitHub para acessar.</p>
+            <input type="password" id="tokenInput" placeholder="ghp_xxxxxxxxxxxx">
+            <button onclick="login()">ENTRAR</button>
+        </div>
+    </div>
+
+    <div id="app">
+        <div class="sidebar">
+            <div class="brand">KYNTO CMS <span>.</span></div>
+            <button class="btn-new" onclick="clearEditor()"><i class="fa-solid fa-plus"></i> Novo Post</button>
+            <div class="post-list" id="postList">
+                <p style="text-align:center; font-size:12px; color:#64748b; margin-top:20px;">Carregando...</p>
+            </div>
+        </div>
+
+        <div class="main">
+            <div class="top-bar">
+                <input type="text" id="postTitle" placeholder="Digite o título do post aqui...">
+                <div class="actions">
+                    <button class="btn-action btn-del" onclick="deletePost()" id="btnDelete" style="display:none;" title="Excluir"><i class="fa-solid fa-trash"></i></button>
+                    <button class="btn-action btn-draft" onclick="savePost('draft')" id="btnDraft">Salvar Rascunho</button>
+                    <button class="btn-action btn-pub" onclick="savePost('published')" id="btnPub">Publicar</button>
+                </div>
+            </div>
+            <div class="editor-wrapper">
+                <div class="paper">
+                    <div id="editor"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/quill-image-resize-module@3.0.0/image-resize.min.js"></script>
+
+    <script>
+        // === CONFIGURAÇÃO (PREENCHA AQUI) ===
+        const CONFIG = {
+            USER: 'brunodalolio88-svg', 
+            REPO: 'KYNTO_1',       
+            DB_FILE: 'db.json'
+        };
+
+        // SETUP
+        let globalPosts = [], currentSha = null, activeIndex = -1, ghToken = '';
+        var quill = new Quill('#editor', {
+            theme: 'snow',
+            placeholder: 'Escreva seu conteúdo...',
+            modules: {
+                imageResize: { displaySize: true }, // Habilita redimensionar img
+                toolbar: [ [{ 'header': [2, 3, false] }], ['bold', 'italic', 'blockquote'], [{ 'list': 'ordered'}, { 'list': 'bullet' }], ['link', 'image', 'video'], ['clean'] ]
+            }
+        });
+
+        // LOGIN
+        if(localStorage.getItem('gh_token')) document.getElementById('tokenInput').value = localStorage.getItem('gh_token');
+
+        function login() {
+            const val = document.getElementById('tokenInput').value;
+            if(!val) return alert('Token necessário');
+            ghToken = val;
+            localStorage.setItem('gh_token', val);
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('app').classList.add('logged-in');
+            loadPosts();
+        }
+
+        // CARREGAR DADOS
+        async function loadPosts() {
+            try {
+                const file = await req(`contents/${CONFIG.DB_FILE}`, 'GET');
+                currentSha = file.sha;
+                globalPosts = JSON.parse(atob(file.content));
+                renderList();
+            } catch(e) { console.log('Novo DB'); globalPosts = []; renderList(); }
+        }
+
+        function renderList() {
+            const list = document.getElementById('postList');
+            list.innerHTML = '';
+            if(!globalPosts.length) list.innerHTML = '<p style="text-align:center;font-size:12px;color:#64748b;padding:20px;">Sem posts.</p>';
+            
+            globalPosts.forEach((p, i) => {
+                const item = document.createElement('div');
+                item.className = `post-item ${i === activeIndex ? 'active' : ''}`;
+                item.innerHTML = `<span class="post-title">${p.title}</span><span class="post-status" style="color:${p.status==='published'?'#02BF93':'#f59e0b'}">${p.status==='published'?'● Publicado':'● Rascunho'} - ${p.date}</span>`;
+                item.onclick = () => loadEditor(i);
+                list.appendChild(item);
+            });
+        }
+
+        // EDITOR
+        function loadEditor(i) {
+            activeIndex = i;
+            document.getElementById('postTitle').value = globalPosts[i].title;
+            quill.root.innerHTML = globalPosts[i].content;
+            document.getElementById('btnDelete').style.display = 'block';
+            renderList();
+        }
+        function clearEditor() {
+            activeIndex = -1;
+            document.getElementById('postTitle').value = '';
+            quill.root.innerHTML = '';
+            document.getElementById('btnDelete').style.display = 'none';
+            renderList();
+        }
+
+        // SALVAR
+        async function savePost(status) {
+            const title = document.getElementById('postTitle').value;
+            if(!title) return alert('Título obrigatório');
+            
+            const btn = document.getElementById(status === 'published' ? 'btnPub' : 'btnDraft');
+            const oldText = btn.innerText;
+            btn.innerText = '...'; btn.disabled = true;
+
+            const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+            const postData = {
+                title, slug, status,
+                date: new Date().toLocaleDateString('pt-BR'),
+                snippet: quill.getText().substring(0, 100) + '...',
+                content: quill.root.innerHTML
+            };
+
+            if(activeIndex > -1) globalPosts[activeIndex] = postData;
+            else { globalPosts.unshift(postData); activeIndex = 0; }
+
+            try {
+                // 1. Salva JSON
+                const res = await req(`contents/${CONFIG.DB_FILE}`, 'PUT', {
+                    message: `Update ${title}`,
+                    content: btoa(unescape(encodeURIComponent(JSON.stringify(globalPosts, null, 2)))),
+                    sha: currentSha
+                });
+                currentSha = res.content.sha;
+
+                // 2. Se Publicar, cria HTML
+                if(status === 'published') {
+                    let shaHtml = null;
+                    try { const check = await req(`contents/posts/${slug}.html`, 'GET'); shaHtml = check.sha; } catch(e){}
+                    
+                    const htmlContent = getTemplate(title, postData.date, postData.content);
+                    await req(`contents/posts/${slug}.html`, 'PUT', {
+                        message: `Deploy ${title}`,
+                        content: btoa(unescape(encodeURIComponent(htmlContent))),
+                        sha: shaHtml
+                    });
+                }
+                alert('Salvo com sucesso!');
+                renderList();
+            } catch(e) { alert('Erro: ' + e.message); }
+            btn.innerText = oldText; btn.disabled = false;
+        }
+
+        async function deletePost() {
+            if(!confirm('Deletar?')) return;
+            globalPosts.splice(activeIndex, 1);
+            try {
+                const res = await req(`contents/${CONFIG.DB_FILE}`, 'PUT', {
+                    message: 'Delete post',
+                    content: btoa(unescape(encodeURIComponent(JSON.stringify(globalPosts, null, 2)))),
+                    sha: currentSha
+                });
+                currentSha = res.content.sha;
+                clearEditor();
+                alert('Deletado.');
+            } catch(e) { alert('Erro'); }
+        }
+
+        // API
+        async function req(endpoint, method, body) {
+            const opts = { method, headers: { 'Authorization': `token ${ghToken}`, 'Content-Type': 'application/json' } };
+            if(body) opts.body = JSON.stringify(body);
+            const r = await fetch(`https://api.github.com/repos/${CONFIG.USER}/${CONFIG.REPO}/${endpoint}`, opts);
+            if(!r.ok) throw new Error(await r.text());
+            return r.json();
+        }
+
+        // HTML TEMPLATE (GERADO AUTOMATICAMENTE)
+        function getTemplate(title, date, content) {
+            return `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>${title} - Blog Kynto</title>
+            <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+            <style>
+                body{font-family:'Inter',sans-serif;margin:0;color:#334155;background:#fff;line-height:1.8}
+                header{background:#0f172a;padding:20px;text-align:center;color:#fff;border-bottom:4px solid #02BF93}
+                .container{max-width:800px;margin:50px auto;padding:0 20px}
+                h1{font-size:40px;color:#0f172a;line-height:1.1;margin-bottom:10px}
+                .meta{color:#64748b;font-size:14px;display:block;margin-bottom:40px;border-bottom:1px solid #e2e8f0;padding-bottom:20px}
+                .content img{max-width:100%;border-radius:8px;margin:20px 0}
+                .content blockquote{border-left:4px solid #02BF93;margin:20px 0;padding-left:20px;font-style:italic;color:#475569}
+                .btn-back{display:inline-block;margin-top:50px;text-decoration:none;color:#02BF93;font-weight:bold;border:1px solid #02BF93;padding:10px 20px;border-radius:5px}
+            </style></head><body>
+            <header>KYNTO <span>BLOG</span></header>
+            <article class="container">
+                <h1>${title}</h1>
+                <span class="meta">${date}</span>
+                <div class="content">${content}</div>
+                <a href="../index.html" class="btn-back">← Voltar</a>
+            </article>
+            </body></html>`;
+        }
+    </script>
+</body>
+</html>
