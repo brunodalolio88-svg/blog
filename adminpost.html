@@ -3,96 +3,157 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kynto Admin | Editor Inteligente</title>
+    <title>Kynto Admin | Editor Pro</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     
     <style>
-        :root { --bg: #0f172a; --panel: #1e293b; --primary: #02BF93; --text: #f8fafc; --border: #334155; }
-        body { margin:0; padding:0; font-family:'Outfit', sans-serif; background:var(--bg); color:var(--text); height:100vh; overflow:hidden; }
+        /* --- RESET E VARIAVEIS --- */
+        :root { 
+            --bg: #0f172a; 
+            --panel: #1e293b; 
+            --primary: #02BF93; 
+            --text: #f8fafc; 
+            --border: #334155; 
+        }
+        body { margin:0; padding:0; font-family:'Outfit', sans-serif; background:var(--bg); color:var(--text); height:100vh; overflow:hidden; display:flex; }
         
-        /* LOGIN */
-        #login-screen { position:fixed; top:0; left:0; width:100%; height:100%; background:var(--bg); z-index:999; display:flex; align-items:center; justify-content:center; flex-direction:column; }
-        .box { background:var(--panel); padding:40px; border-radius:12px; width:100%; max-width:350px; text-align:center; border:1px solid var(--border); box-shadow:0 20px 50px rgba(0,0,0,0.5); }
-        .box input { width:100%; padding:12px; margin:20px 0; background:var(--bg); border:1px solid var(--border); color:#fff; border-radius:6px; outline:none; }
+        /* --- TELA DE LOGIN --- */
+        #login-screen { position:fixed; top:0; left:0; width:100%; height:100%; background:var(--bg); z-index:9999; display:flex; align-items:center; justify-content:center; flex-direction:column; }
+        .box { background:var(--panel); padding:40px; border-radius:12px; width:100%; max-width:350px; text-align:center; border:1px solid var(--border); box-shadow:0 20px 60px rgba(0,0,0,0.5); }
+        .box h2 { color:var(--primary); margin-bottom:20px; }
+        .box input { width:100%; padding:12px; margin-bottom:15px; background:var(--bg); border:1px solid var(--border); color:#fff; border-radius:6px; outline:none; }
         .box button { width:100%; padding:12px; background:var(--primary); color:#000; font-weight:800; border:none; border-radius:6px; cursor:pointer; }
-        .reset { margin-top:15px; font-size:12px; color:#64748b; cursor:pointer; text-decoration:underline; }
+        .reset { margin-top:20px; font-size:12px; color:#64748b; cursor:pointer; text-decoration:underline; }
 
-        /* PAINEL */
-        #app { display:flex; width:100%; height:100%; visibility:hidden; opacity:0; transition:0.5s; }
-        #app.visible { visibility:visible; opacity:1; }
-
-        .sidebar { width:280px; background:var(--panel); border-right:1px solid var(--border); padding:20px; display:flex; flex-direction:column; }
-        .brand { font-size:20px; font-weight:800; color:#fff; margin-bottom:20px; display:flex; align-items:center; gap:10px; }
-        .btn-new { background:var(--primary); color:#000; border:none; padding:12px; border-radius:6px; font-weight:700; cursor:pointer; width:100%; }
+        /* --- SIDEBAR (Barra Lateral) --- */
+        .sidebar { width:280px; background:var(--panel); border-right:1px solid var(--border); padding:20px; display:flex; flex-direction:column; z-index:20; }
+        .brand { font-size:22px; font-weight:800; color:#fff; margin-bottom:20px; display:flex; align-items:center; gap:10px; }
+        .brand i { color:var(--primary); }
         
-        .post-list { flex:1; overflow-y:auto; margin-top:20px; }
-        .post-item { padding:12px; margin-bottom:5px; border-radius:6px; cursor:pointer; transition:0.2s; background:rgba(255,255,255,0.03); }
+        .btn-new { background:var(--primary); color:#000; width:100%; padding:12px; border-radius:6px; font-weight:700; border:none; cursor:pointer; margin-bottom:20px; transition:0.2s; display:flex; align-items:center; justify-content:center; gap:8px; }
+        .btn-new:hover { transform:translateY(-2px); box-shadow:0 4px 10px rgba(2,191,147,0.3); }
+
+        .section-title { font-size:11px; text-transform:uppercase; color:#64748b; font-weight:700; margin-top:20px; margin-bottom:10px; letter-spacing:1px; }
+        
+        .resources-grid { display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:20px; }
+        .res-btn { background:rgba(255,255,255,0.05); color:#cbd5e1; text-decoration:none; padding:8px; border-radius:4px; font-size:12px; text-align:center; transition:0.2s; border:1px solid transparent; }
+        .res-btn:hover { background:rgba(255,255,255,0.1); color:#fff; border-color:#64748b; }
+        
+        .post-list { flex:1; overflow-y:auto; }
+        .post-item { padding:12px; margin-bottom:5px; border-radius:6px; cursor:pointer; background:rgba(255,255,255,0.03); border-left:3px solid transparent; transition:0.2s; }
         .post-item:hover { background:rgba(255,255,255,0.08); }
-        .post-item.active { background:rgba(2, 191, 147, 0.15); border:1px solid var(--primary); }
-        .post-title { font-size:13px; font-weight:600; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .post-item.active { background:rgba(2, 191, 147, 0.1); border-left-color:var(--primary); }
+        .post-title { font-size:13px; font-weight:600; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:#f1f5f9; }
+        .post-status { font-size:10px; color:#94a3b8; margin-top:3px; display:block; }
 
-        .content { flex:1; background:#f1f5f9; display:flex; flex-direction:column; }
-        .topbar { padding:0 30px; height:60px; background:#fff; border-bottom:1px solid #ddd; display:flex; justify-content:flex-end; align-items:center; gap:10px; }
-        .btn { padding:8px 20px; border-radius:6px; font-size:13px; font-weight:700; cursor:pointer; border:1px solid #ddd; background:#fff; color:#333; }
-        .btn-pub { background:var(--primary); border:none; color:#000; }
-        .btn-del { color:red; border-color:#fee2e2; }
+        /* --- ÁREA PRINCIPAL --- */
+        .main { flex:1; display:flex; flex-direction:column; background:#f1f5f9; position:relative; min-width:0; }
+        
+        .topbar { height:60px; background:#fff; border-bottom:1px solid #cbd5e1; display:flex; align-items:center; justify-content:flex-end; padding:0 30px; gap:10px; }
+        .btn-action { padding:8px 20px; border-radius:6px; font-size:13px; font-weight:700; cursor:pointer; border:1px solid #cbd5e1; background:#fff; color:#334155; transition:0.2s; }
+        .btn-action:hover { background:#f8fafc; border-color:#94a3b8; }
+        .btn-pub { background:var(--primary); border-color:var(--primary); color:#000; }
+        .btn-pub:hover { filter:brightness(1.05); }
+        .btn-del { color:#ef4444; border-color:rgba(239,68,68,0.2); }
+        .btn-del:hover { background:#fef2f2; }
 
-        /* EDITOR */
-        .editor-area { flex:1; overflow-y:auto; padding:40px; display:flex; justify-content:center; }
-        .paper { background:#fff; width:100%; max-width:800px; min-height:100%; box-shadow:0 5px 30px rgba(0,0,0,0.05); border-radius:8px; display:flex; flex-direction:column; }
+        /* --- EDITOR (CORREÇÃO DE SCROLL E CORES) --- */
+        .editor-wrapper { 
+            flex:1; 
+            overflow-y:auto; /* Permite rolar a página inteira */
+            padding:40px; 
+            display:flex; 
+            justify-content:center;
+            scroll-behavior: smooth;
+        }
         
-        .meta { padding:30px 40px 0; }
-        .input-title { width:100%; font-size:32px; font-weight:800; border:none; outline:none; color:#0f172a; font-family:'Outfit'; margin-bottom:10px; }
+        .paper { 
+            background:#fff; 
+            width:100%; 
+            max-width:850px; 
+            min-height:1000px; /* Altura mínima garantida */
+            height: fit-content; /* Cresce com o conteúdo */
+            box-shadow:0 10px 30px rgba(0,0,0,0.08); 
+            border-radius:8px; 
+            display:flex; 
+            flex-direction:column;
+            margin-bottom: 50px; /* Espaço no final pra não colar */
+        }
         
-        /* QUILL CUSTOMIZADO */
-        .ql-toolbar { border:none!important; border-bottom:1px solid #eee!important; padding:15px 40px!important; background:#fff; position:sticky; top:0; z-index:10; }
-        .ql-container { border:none!important; font-size:18px; font-family:'Merriweather', serif; flex:1; }
-        .ql-editor { padding:40px; color:#333; line-height:1.8; }
-        .ql-editor img { max-width:100%; border-radius:5px; margin:20px 0; display:block; }
+        .meta-inputs { padding:40px 40px 10px 40px; }
+        .input-title { width:100%; font-size:36px; font-weight:800; border:none; outline:none; color:#0f172a; font-family:'Outfit'; margin-bottom:20px; line-height:1.2; }
+        .input-title::placeholder { color:#cbd5e1; }
+        
+        .input-img-group { display:flex; gap:10px; background:#f8fafc; padding:5px; border-radius:6px; border:1px solid #e2e8f0; }
+        .input-url { flex:1; padding:10px; background:transparent; border:none; font-size:13px; color:#334155; outline:none; }
+        .icon-helper { padding:10px; color:#94a3b8; font-size:14px; }
+
+        /* Quill Fixes */
+        .ql-toolbar { border:none!important; border-bottom:1px solid #f1f5f9!important; padding:15px 40px!important; position:sticky; top:0; background:#fff; z-index:100; border-radius: 8px 8px 0 0; }
+        .ql-container { border:none!important; font-size:18px; font-family:'Merriweather', serif; }
+        
+        /* COR DO TEXTO E ESPAÇAMENTO */
+        .ql-editor { padding:40px; color:#1e293b; line-height:1.8; min-height:500px; overflow-y: visible; }
+        .ql-editor p { margin-bottom:15px; }
+        .ql-editor img { max-width:100%; border-radius:8px; margin:20px 0; display:block; box-shadow:0 5px 15px rgba(0,0,0,0.1); }
+        .ql-editor blockquote { border-left:4px solid var(--primary); padding-left:15px; font-style:italic; background:#f0fdfa; padding:15px; }
     </style>
 </head>
 <body>
 
     <div id="login-screen">
         <div class="box">
-            <h2 style="color:#02BF93">ADMINISTRADOR</h2>
+            <h2><i class="fa-solid fa-lock"></i> KYNTO ADMIN</h2>
             <input type="password" id="tokenInput" placeholder="Token GitHub">
-            <button id="btnLogin">ACESSAR</button>
-            <div class="reset" id="btnReset">Limpar senha</div>
+            <button id="btnLogin">ENTRAR</button>
+            <div class="reset" id="btnReset">Limpar senha salva</div>
         </div>
     </div>
 
-    <div id="app">
-        <div class="sidebar">
-            <div class="brand"><i class="fa-solid fa-cube"></i> KYNTO</div>
-            <button class="btn-new" onclick="newPost()">+ Novo Artigo</button>
-            <div class="post-list" id="postList">Carregando...</div>
+    <div class="sidebar">
+        <div class="brand"><i class="fa-solid fa-cube"></i> KYNTO</div>
+        <button class="btn-new" onclick="newPost()"><i class="fa-solid fa-plus"></i> Novo Post</button>
+        
+        <div class="section-title">Atalhos Úteis (Grátis)</div>
+        <div class="resources-grid">
+            <a href="https://www.pexels.com/pt-br/" target="_blank" class="res-btn" title="Fotos Gratuitas"><i class="fa-solid fa-camera"></i> Pexels</a>
+            <a href="https://unsplash.com/pt-br" target="_blank" class="res-btn" title="Fotos Gratuitas"><i class="fa-solid fa-image"></i> Unsplash</a>
+            <a href="https://fontawesome.com/search?o=r&m=free" target="_blank" class="res-btn" title="Ícones"><i class="fa-solid fa-icons"></i> Ícones</a>
+            <a href="https://emoji.gg/" target="_blank" class="res-btn" title="Emojis"><i class="fa-regular fa-face-smile"></i> Emojis</a>
+        </div>
+
+        <div class="section-title">Seus Artigos</div>
+        <div class="post-list" id="postList">Carregando...</div>
+    </div>
+
+    <div class="main" id="app">
+        <div class="topbar">
+            <button class="btn-action btn-del" onclick="deletePost()" id="btnDel" style="display:none"><i class="fa-solid fa-trash"></i></button>
+            <button class="btn-action" onclick="save('draft')"><i class="fa-regular fa-floppy-disk"></i> Rascunho</button>
+            <button class="btn-action btn-pub" onclick="save('published')"><i class="fa-solid fa-paper-plane"></i> Publicar</button>
         </div>
         
-        <div class="content">
-            <div class="topbar">
-                <button class="btn btn-del" onclick="deletePost()" id="btnDel" style="display:none">Excluir</button>
-                <button class="btn" onclick="save('draft')">Rascunho</button>
-                <button class="btn btn-pub" onclick="save('published')">Publicar</button>
-            </div>
-            
-            <div class="editor-area">
-                <div class="paper">
-                    <div class="meta">
-                        <input type="text" id="postTitle" class="input-title" placeholder="Digite o Título...">
+        <div class="editor-wrapper">
+            <div class="paper">
+                <div class="meta-inputs">
+                    <input type="text" id="postTitle" class="input-title" placeholder="Digite o Título do Artigo...">
+                    
+                    <div class="input-img-group">
+                        <i class="fa-solid fa-link icon-helper"></i>
+                        <input type="text" id="postImage" class="input-url" placeholder="Cole o link da Imagem de Capa aqui (Opcional - Se vazio, pega a 1ª foto do texto)">
                     </div>
-                    <div id="editor"></div>
                 </div>
+                <div id="editor"></div>
             </div>
         </div>
     </div>
 
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <script>
-        // CONFIGURAÇÃO JÁ IMPLANTADA
+        // CONFIGURAÇÃO
         const CONFIG = {
             USER: 'brunodalolio88-svg', 
             REPO: 'blog',       
@@ -103,16 +164,17 @@
 
         // INICIALIZAÇÃO
         window.addEventListener('DOMContentLoaded', () => {
+            // Editor com Cores e Alinhamento
             try {
                 quill = new Quill('#editor', {
                     theme: 'snow',
-                    placeholder: 'Escreva aqui...',
+                    placeholder: 'Escreva seu conteúdo...',
                     modules: {
                         toolbar: [
                             [{ 'header': [2, 3, false] }],
                             ['bold', 'italic', 'underline', 'strike'],
-                            [{ 'align': [] }],  
-                            [{ 'color': [] }, { 'background': [] }],
+                            [{ 'color': [] }, { 'background': [] }], // CORES
+                            [{ 'align': [] }], // ALINHAMENTO
                             [{ 'list': 'ordered'}, { 'list': 'bullet' }],
                             ['link', 'image', 'video'],
                             ['clean']
@@ -121,6 +183,7 @@
                 });
             } catch(e) { console.error(e); }
 
+            // Login
             const btnLogin = document.getElementById('btnLogin');
             if(token) document.getElementById('tokenInput').value = token;
 
@@ -138,11 +201,13 @@
 
         function startApp() {
             document.getElementById('login-screen').style.display = 'none';
-            document.getElementById('app').classList.add('visible');
+            // Em vez de classe, mudei o display direto pra garantir
+            document.getElementById('app').style.opacity = '1';
+            document.getElementById('app').style.visibility = 'visible';
             loadDB();
         }
 
-        // BANCO DE DADOS
+        // CARREGAR POSTS
         async function loadDB() {
             const list = document.getElementById('postList');
             try {
@@ -171,7 +236,7 @@
                 const isPub = p.status === 'published';
                 list.innerHTML += `<div class="post-item ${i===activeIdx?'active':''}" onclick="openPost(${i})">
                     <span class="post-title">${p.title}</span>
-                    <span style="font-size:10px;color:${isPub?'#02BF93':'orange'}">● ${isPub?'No ar':'Rascunho'}</span>
+                    <span class="post-status">● ${isPub?'Publicado':'Rascunho'}</span>
                 </div>`;
             });
         }
@@ -179,6 +244,7 @@
         function newPost() {
             activeIdx = -1;
             document.getElementById('postTitle').value = '';
+            document.getElementById('postImage').value = '';
             quill.root.innerHTML = '';
             document.getElementById('btnDel').style.display = 'none';
             renderList();
@@ -188,6 +254,7 @@
             activeIdx = i;
             const p = posts[i];
             document.getElementById('postTitle').value = p.title;
+            document.getElementById('postImage').value = p.image || '';
             quill.root.innerHTML = p.content;
             document.getElementById('btnDel').style.display = 'block';
             renderList();
@@ -200,20 +267,22 @@
 
             const slug = title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
             
-            // --- AUTO DETECTAR IMAGEM ---
-            const content = quill.root.innerHTML;
-            const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = content;
-            const firstImg = tempDiv.querySelector('img');
-            const autoImage = firstImg ? firstImg.src : '';
-            // ----------------------------
+            // Lógica Inteligente de Imagem
+            let manualImg = document.getElementById('postImage').value;
+            if(!manualImg) {
+                // Tenta pegar a primeira imagem do corpo do texto
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = quill.root.innerHTML;
+                const firstImg = tempDiv.querySelector('img');
+                if(firstImg) manualImg = firstImg.src;
+            }
 
             const postData = {
                 title, slug, status,
-                image: autoImage, 
+                image: manualImg,
                 date: new Date().toLocaleDateString('pt-BR'),
                 snippet: quill.getText().substring(0, 120) + '...',
-                content: content
+                content: quill.root.innerHTML
             };
 
             if(activeIdx > -1) posts[activeIdx] = postData;
@@ -230,12 +299,11 @@
                     body: JSON.stringify({ message: 'Save', content: jsonB64, sha: sha })
                 });
                 
-                const d = await res.json();
-                sha = d.content.sha;
+                const d = await res.json(); sha = d.content.sha;
 
                 if(status === 'published') await saveHtml(postData);
 
-                alert("Salvo!");
+                alert("Salvo com sucesso!");
                 renderList();
             } catch(e) { alert("Erro: " + e.message); }
         }
@@ -249,7 +317,7 @@
                 if(c.ok) { const d = await c.json(); htmlSha = d.sha; }
             } catch(e) {}
 
-            // Template com Google Ads implantado
+            // Template sem duplicar imagem no topo, mas com Ads e Leia Também
             const tpl = `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>${post.title}</title>
             <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1879074686301515" crossorigin="anonymous"><\/script>
             <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
@@ -265,6 +333,7 @@
                 .content blockquote{border-left:4px solid #02BF93;margin:20px 0;padding:15px;background:#f0fdf9;font-style:italic}
                 .ad{background:#f1f5f9;padding:20px;text-align:center;color:#94a3b8;font-size:12px;margin:40px 0;border:1px dashed #cbd5e1;border-radius:8px}
                 .related{margin-top:60px;padding-top:40px;border-top:1px solid #eee}
+                .related h3{font-family:'Outfit',sans-serif;color:#0f172a;margin-bottom:20px}
                 .r-card{display:block;background:#fff;padding:15px;border:1px solid #eee;border-radius:8px;text-decoration:none;margin-bottom:10px;transition:0.3s}
                 .r-card:hover{border-color:#02BF93;transform:translateY(-3px)}
                 .r-title{font-family:'Outfit',sans-serif;font-weight:700;color:#0f172a}
@@ -273,9 +342,9 @@
             <header><a href="../index.html" class="logo">KYNTO<span style="color:#02BF93">BLOG</span></a></header>
             <div class="container"><article class="box">
                 <h1>${post.title}</h1><span class="meta">${post.date}</span>
-                <div class="ad">Publicidade Google (Topo)</div>
+                <div class="ad">Publicidade Google</div>
                 <div class="content">${post.content}</div>
-                <div class="ad">Publicidade Google (Rodapé)</div>
+                <div class="ad">Publicidade Google</div>
                 <div class="related"><h3>Leia também</h3><div id="rel">...</div></div>
             </article></div><footer>© 2026 Kynto Soluções</footer>
             <script>fetch('../db.json').then(r=>r.json()).then(p=>{
