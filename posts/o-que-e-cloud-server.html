@@ -12,24 +12,47 @@
                 .logo{color:var(--dark);font-family:'Outfit',sans-serif;font-weight:800;font-size:24px;text-decoration:none;display:block;text-align:center}
                 .logo span{color:var(--primary)}
                 
-                /* LAYOUT RESPONSIVO OTIMIZADO */
-                .container { max-width:1140px; margin:0 auto; padding:40px 20px; display:grid; grid-template-columns: 2.5fr 1fr; gap:60px; }
+                .container { max-width:1140px; margin:0 auto; padding:60px 20px; display:grid; grid-template-columns: 2.5fr 1fr; gap:60px; }
                 
-                /* Regra fundamental para mobile */
-                @media (max-width: 900px) { 
-                    .container { grid-template-columns: 1fr; gap:30px; padding:20px 15px; display: block; } 
-                    h1 { font-size: 28px !important; line-height: 1.3 !important; }
-                    .sidebar { margin-top: 50px; position: static; height: auto; }
-                    .meta { flex-direction: column; gap: 10px; }
+                /* TÍTULO & ESPAÇAMENTO AJUSTADOS */
+                h1 { 
+                    font-family:'Outfit',sans-serif; 
+                    font-size:48px; 
+                    color:var(--dark); 
+                    line-height:1.2; 
+                    margin:20px 0 30px 0; /* Mais espaço embaixo do título */
+                    word-wrap: break-word; 
+                    overflow-wrap: break-word; /* Garante quebra de palavras longas */
+                    hyphens: auto; /* Hifenização se necessário */
                 }
 
-                .article-header { margin-bottom:20px; text-align:center; }
-                .cat-tag { background:rgba(2,191,147,0.1); color:var(--primary); padding:6px 12px; border-radius:50px; font-family:'Outfit'; font-size:12px; font-weight:700; text-transform:uppercase; display:inline-block; margin-bottom:15px; }
-                h1 { font-family:'Outfit',sans-serif; font-size:42px; color:var(--dark); line-height:1.2; margin:0 0 20px 0; word-wrap: break-word; hyphens: auto; }
-                .meta { font-family:'Outfit',sans-serif; color:#64748b; font-size:14px; display:flex; align-items:center; justify-content:center; gap:20px; border-bottom:1px solid #eee; padding-bottom:30px; margin-bottom:40px; }
-                .share-btn { cursor:pointer; color:#02BF93; transition:0.3s; }
+                .article-header { margin-bottom:40px; text-align:center; max-width: 900px; margin-left: auto; margin-right: auto; }
                 
-                /* CONTENT FIXES (MOBILE) */
+                .cat-tag { background:rgba(2,191,147,0.1); color:var(--primary); padding:6px 12px; border-radius:50px; font-family:'Outfit'; font-size:12px; font-weight:700; text-transform:uppercase; display:inline-block; }
+                
+                .meta { 
+                    font-family:'Outfit',sans-serif; 
+                    color:#64748b; 
+                    font-size:14px; 
+                    display:flex; 
+                    align-items:center; 
+                    justify-content:center; 
+                    gap:25px; 
+                    border-top:1px solid #eee; /* Linha em cima */
+                    border-bottom:1px solid #eee; /* Linha em baixo */
+                    padding:20px 0; 
+                    margin-top:30px;
+                }
+                .share-btn { cursor:pointer; color:#02BF93; transition:0.3s; }
+
+                /* MOBILE RESPONSIVO */
+                @media (max-width: 900px) { 
+                    .container { grid-template-columns: 1fr; gap:30px; padding:30px 20px; display: block; } 
+                    h1 { font-size: 32px !important; margin: 15px 0 20px 0; } /* Fonte menor no mobile */
+                    .sidebar { margin-top: 50px; position: static; height: auto; }
+                    .meta { flex-wrap: wrap; gap: 15px; }
+                }
+
                 .content { font-size:18px; color:#1e293b; overflow-wrap: break-word; word-wrap: break-word; word-break: break-word; }
                 .content img, .content video, .content iframe { 
                     max-width: 100% !important; 
@@ -39,7 +62,7 @@
                     display:block; 
                     box-shadow: 0 4px 12px rgba(0,0,0,0.05);
                 }
-                .content p { margin-bottom: 20px; }
+                .content p { margin-bottom: 24px; } /* Parágrafos mais espaçados */
 
                 .sidebar { position:sticky; top:100px; height:fit-content; }
                 .widget-title { font-family:'Outfit'; font-size:14px; font-weight:800; text-transform:uppercase; color:#94a3b8; letter-spacing:1px; margin-bottom:20px; display:block; }
@@ -62,13 +85,13 @@
                             <h1>O que é Cloud Server?</h1>
                             <div class="meta">
                                 <span><i class="fa-regular fa-calendar"></i> 29/01/2026</span>
-                                <span><i class="fa-regular fa-clock"></i> 2 min</span>
-                                <span class="share-btn" onclick="sharePost()" title="Compartilhar"><i class="fa-solid fa-share-nodes"></i></span>
+                                <span><i class="fa-regular fa-clock"></i> 2 min leitura</span>
+                                <span class="share-btn" onclick="sharePost()" title="Compartilhar"><i class="fa-solid fa-share-nodes"></i> Compartilhar</span>
                             </div>
                         </header>
-                        <div style="background:#f1f5f9;padding:20px;text-align:center;color:#999;margin-bottom:30px;border-radius:8px">Publicidade Google</div>
+                        <div style="background:#f1f5f9;padding:20px;text-align:center;color:#999;margin-bottom:40px;border-radius:8px">Publicidade Google</div>
                         <div class="content"><p><img src="https://images.unsplash.com/photo-1667984390553-7f439e6ae401?fm=jpg&amp;q=60&amp;w=3000&amp;auto=format&amp;fit=crop&amp;ixlib=rb-4.1.0&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="uma imagem gerada por computador de um computador"></p><p>Cloud server é um serviço de computação em nuvem que permite a ativação facilitada de servidores virtuais para você migrar ou rodar aplicações na nuvem com alta confiabilidade.</p><p>Através de um painel de autosserviço, criado para simplificar o gerenciamento e a análise do consumo de recursos, você ativa ou remove servidores, gera imagens e pontos de restauração, configura backups, acessa o terminal e os dados de monitoramento.</p><p>Conheça os principais componentes:</p><ul><li><strong><em>Software de gerenciamento em nuvem</em></strong>, composto por programas como&nbsp;<strong>VMware</strong>,&nbsp;<strong>Nutanix</strong>&nbsp;e&nbsp;<strong>Proxmox</strong>;</li><li><strong><em>Software de virtualização</em></strong>, como o&nbsp;<a href="https://www.centralserver.com/cloud-servers/" target="_blank" style="color: rgb(43, 108, 176); background-color: rgba(0, 0, 0, 0);"><strong>hypervisor KVM</strong></a>, com recursos de alta disponibilidade de recursos, alocação simplificada, troca de servidores sem parada, switch virtual, controle de memória, processamento, espaço em disco, IOPS, entre outros;</li><li><strong><em>Alocação dinâmica dos cloud servers no cluster de hospedeiros</em></strong>, para garantir o pleno acesso à capacidade computacional contratada;</li><li><strong>Servidores hospedeiros</strong>, com alta capacidade de processamento e memória e baixo consumo de energia;</li><li><strong><em>Camada de storage SSD virtualizada (Ceph)</em></strong>, com redundância total e expansão transparente de capacidade;</li><li><strong><em>Hardware de rede e conexões redundantes</em></strong>.</li></ul><p>O software de virtualização realiza a alocação dos recursos computacionais dos hospdeiros de forma exclusiva e isolada para os cloud servers.</p><p>Em cada hospedeiro físico há recursos computacionais disponíveis (CPU, memória, disco e rede) usados pelos cloud servers. Caso um hospedeiro apresente falha, um mecanismo de alta disponibilidade entra em ação e reinicia automaticamente os cloud servers em um novo equipamento.</p><p>Esta infraestrutura oferece servidores na nuvem com facilidade de expansão e suporte a aplicações que demandem alta capacidade computacional e performance.</p><p>Quer saber mais? Então veja este artigo que mostra a&nbsp;<a href="https://blog.centralserver.com.br/sera-que-voce-precisa-de-um-cloud-server-ou-de-um-vps/" target="_blank" style="color: rgb(43, 108, 176); background-color: rgba(0, 0, 0, 0);">diferença entre Cloud Servers e VPS</a>.</p><p>E a aproveite para conhecer os&nbsp;<a href="https://www.centralserver.com/cloud-servers/" target="_blank" style="color: rgb(43, 108, 176); background-color: rgba(0, 0, 0, 0);">KVM Servers</a>, a solução de cloud servers de alto desempenho e confiablidade fornecida no Brasil pela&nbsp;<strong>CentralServer</strong>.</p></div>
-                        <div style="background:#f1f5f9;padding:20px;text-align:center;color:#999;margin-top:30px;border-radius:8px">Publicidade Google</div>
+                        <div style="background:#f1f5f9;padding:20px;text-align:center;color:#999;margin-top:40px;border-radius:8px">Publicidade Google</div>
                     </article>
                     <aside class="sidebar">
                         <span class="widget-title">Últimas Notícias</span>
