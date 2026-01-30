@@ -3,98 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog Kynto | Tecnologia</title>
+    <title>Kynto Admin | Final</title>
     
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1879074686301515" crossorigin="anonymous"></script>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Merriweather:wght@300;400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     
     <style>
-        :root { --dark: #0f172a; --green: #02BF93; --bg: #F8FAFC; --card-bg: #ffffff; }
-        body { font-family: 'Outfit', sans-serif; background: var(--bg); margin: 0; color: #334155; display: flex; flex-direction: column; min-height: 100vh; }
+        /* ADMIN STYLE */
+        :root { --bg: #f1f5f9; --panel: #1e293b; --primary: #02BF93; --text: #334155; }
+        body { margin:0; padding:0; font-family:'Outfit',sans-serif; background:var(--bg); color:var(--text); height:100vh; overflow:hidden; display:flex; }
         
-        /* HEADER */
-        header { background: #fff; padding: 15px 0; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 20px rgba(0,0,0,0.02); }
-        .container { max-width: 1140px; margin: 0 auto; padding: 0 20px; }
-        .nav { display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 22px; font-weight: 800; color: var(--dark); text-decoration: none; letter-spacing: -1px; }
-        .btn-site { color: var(--dark); text-decoration: none; font-weight: 600; font-size: 13px; border: 2px solid var(--dark); padding: 6px 16px; border-radius: 50px; transition: 0.3s; }
-        .btn-site:hover { background: var(--dark); color: #fff; }
+        #login-screen { position:fixed; top:0; left:0; width:100%; height:100%; background:#0f172a; z-index:9999; display:flex; align-items:center; justify-content:center; flex-direction:column; }
+        .box { background:#1e293b; padding:40px; border-radius:12px; width:100%; max-width:350px; text-align:center; border:1px solid #334155; box-shadow:0 20px 60px rgba(0,0,0,0.5); }
+        .box h2 { color:var(--primary); margin-bottom:20px; }
+        .box input { width:100%; padding:12px; margin-bottom:15px; background:#0f172a; border:1px solid #334155; color:#fff; border-radius:6px; outline:none; }
+        .box button { width:100%; padding:12px; background:var(--primary); color:#000; font-weight:800; border:none; border-radius:6px; cursor:pointer; }
+        .reset { margin-top:20px; font-size:12px; color:#64748b; cursor:pointer; text-decoration:underline; }
 
-        /* HERO (Mais Compacto) */
-        .hero { text-align: center; padding: 40px 0 20px 0; background: linear-gradient(180deg, #fff 0%, #F8FAFC 100%); }
-        .hero h1 { font-size: 42px; font-weight: 800; color: var(--dark); margin: 0 0 10px 0; letter-spacing: -1.5px; line-height: 1.1; }
-        .hero p { font-size: 16px; color: #64748b; max-width: 600px; margin: 0 auto; font-family: 'Merriweather', serif; font-weight: 300; }
+        .sidebar { width:280px; background:var(--panel); padding:20px; display:flex; flex-direction:column; z-index:20; color:#fff; }
+        .brand { font-size:22px; font-weight:800; color:#fff; margin-bottom:20px; display:flex; align-items:center; gap:10px; }
+        .btn-new { background:var(--primary); color:#000; width:100%; padding:12px; border-radius:6px; font-weight:700; border:none; cursor:pointer; margin-bottom:20px; }
+        .post-list { flex:1; overflow-y:auto; }
+        .post-item { padding:12px; margin-bottom:5px; border-radius:6px; cursor:pointer; background:rgba(255,255,255,0.03); transition:0.2s; }
+        .post-item:hover { background:rgba(255,255,255,0.08); }
+        .post-item.active { background:rgba(2, 191, 147, 0.15); border-left:3px solid var(--primary); }
+        .post-title { font-size:13px; font-weight:600; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 
-        /* ADSENSE (Espaço Otimizado) */
-        .ad-container { margin: 20px auto 40px; text-align: center; }
-        .ad-banner { background: #e2e8f0; height: 100px; max-width: 728px; margin: 0 auto; display: flex; align-items: center; justify-content: center; color: #94a3b8; border-radius: 8px; font-size: 12px; border: 1px dashed #cbd5e1; }
+        .main { flex:1; display:flex; flex-direction:column; background:#f1f5f9; position:relative; }
+        .topbar { height:60px; background:#fff; border-bottom:1px solid #cbd5e1; display:flex; align-items:center; justify-content:flex-end; padding:0 30px; gap:10px; }
+        .btn { padding:8px 20px; border-radius:6px; font-size:13px; font-weight:700; cursor:pointer; border:1px solid #cbd5e1; background:#fff; color:#334155; }
+        .btn:hover { background:#f8fafc; }
+        .btn-pub { background:var(--primary); border-color:var(--primary); color:#000; }
+        .btn-del { color:#ef4444; border-color:rgba(239,68,68,0.2); }
 
-        /* GRID */
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; margin-bottom: 60px; }
+        .editor-wrapper { flex:1; overflow-y:auto; padding:40px; display:flex; justify-content:center; }
+        .paper { background:#fff; width:100%; max-width:850px; min-height:1000px; height:fit-content; box-shadow:0 10px 30px rgba(0,0,0,0.08); border-radius:8px; display:flex; flex-direction:column; margin-bottom:50px; }
         
-        .card { background: var(--card-bg); border-radius: 12px; overflow: hidden; transition: 0.3s; display: flex; flex-direction: column; border: 1px solid #e2e8f0; text-decoration: none; color: inherit; height: 100%; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
-        .card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.08); border-color: var(--green); }
-        
-        .card-img-wrapper { overflow: hidden; height: 180px; position: relative; }
-        .card-img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
-        .card:hover .card-img { transform: scale(1.05); }
-        
-        .card-body { padding: 20px; flex: 1; display: flex; flex-direction: column; }
-        .date { font-size: 10px; font-weight: 700; color: var(--green); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 1px; }
-        .title { font-size: 18px; font-weight: 700; color: var(--dark); margin: 0 0 10px 0; line-height: 1.3; }
-        .excerpt { font-size: 14px; color: #64748b; margin-bottom: 20px; flex: 1; line-height: 1.5; }
-        .read-more { color: var(--dark); font-weight: 700; font-size: 13px; margin-top: auto; display: flex; align-items: center; gap: 5px; }
-        .read-more i { transition: 0.3s; }
-        .card:hover .read-more i { transform: translateX(5px); color: var(--green); }
+        .meta-inputs { padding:40px 40px 10px 40px; }
+        .input-title { width:100%; font-size:36px; font-weight:800; border:none; outline:none; color:#0f172a; font-family:'Outfit'; margin-bottom:20px; }
+        .input-url { width:100%; padding:10px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px; font-size:13px; color:#334155; outline:none; }
 
-        /* FOOTER */
-        footer { background: var(--dark); color: #94a3b8; padding: 40px 0 20px; margin-top: auto; border-top: 4px solid var(--green); text-align: center; }
-        .footer-links a { color: #cbd5e1; text-decoration: none; margin: 0 15px; font-size: 14px; transition: 0.3s; }
-        .footer-links a:hover { color: var(--green); }
-        .copyright { margin-top: 20px; font-size: 12px; opacity: 0.6; }
+        .ql-toolbar { border:none!important; border-bottom:1px solid #f1f5f9!important; padding:15px 40px!important; position:sticky; top:0; background:#fff; z-index:100; border-radius:8px 8px 0 0; }
+        .ql-container { border:none!important; font-size:18px; font-family:'Merriweather',serif; }
+        .ql-editor { padding:40px; color:#1e293b; line-height:1.8; min-height:500px; }
+        .ql-editor img { max-width:100%; height:auto; display:block; margin:20px auto; border-radius:8px; }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="container nav">
-            <a href="index.html" class="logo">KYNTO<span style="color:var(--green)">BLOG</span></a>
-            <a href="https://kynto.com.br" class="btn-site">Site Oficial</a>
-        </div>
-    </header>
-
-    <div class="hero">
-        <div class="container">
-            <h1>Blog de Tecnologia</h1>
-            <p>Novidades, segurança e infraestrutura de TI.</p>
+    <div id="login-screen">
+        <div class="box">
+            <h2>🔐 ADMIN</h2>
+            <input type="password" id="tokenInput" placeholder="Token GitHub">
+            <button id="btnLogin">ENTRAR</button>
+            <div class="reset" id="btnReset">Limpar senha</div>
         </div>
     </div>
 
-    <div class="container ad-container">
-        <div class="ad-banner">Publicidade Google</div>
+    <div class="sidebar">
+        <div class="brand"><i class="fa-solid fa-cube"></i> KYNTO</div>
+        <button class="btn-new" onclick="newPost()">+ Novo Post</button>
+        <div class="post-list" id="postList">Carregando...</div>
     </div>
 
-    <div class="container">
-        <div id="posts" class="grid">
-            <div style="text-align:center;width:100%;color:#999;grid-column:1/-1;padding:40px;">Carregando...</div>
+    <div class="main" id="app">
+        <div class="topbar">
+            <button class="btn btn-del" onclick="deletePost()" id="btnDel" style="display:none">Excluir</button>
+            <button class="btn" onclick="save('draft')">Rascunho</button>
+            <button class="btn btn-pub" onclick="save('published')">Publicar</button>
         </div>
-    </div>
-
-    <footer>
-        <div class="container">
-            <div class="footer-links">
-                <a href="https://kynto.com.br">Home</a>
-                <a href="https://kynto.com.br/sobre">Sobre</a>
-                <a href="https://kynto.com.br/contato">Contato</a>
-            </div>
-            <div class="copyright">
-                &copy; 2026 Kynto Soluções.
+        
+        <div class="editor-wrapper">
+            <div class="paper">
+                <div class="meta-inputs">
+                    <input type="text" id="postTitle" class="input-title" placeholder="Título do Artigo...">
+                    <input type="text" id="postImage" class="input-url" placeholder="Capa Opcional (URL) - Só p/ o Índice">
+                </div>
+                <div id="editor"></div>
             </div>
         </div>
-    </footer>
+    </div>
 
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <script>
         const CONFIG = {
             USER: 'brunodalolio88-svg', 
@@ -102,34 +93,252 @@
             DB_FILE: 'db.json'
         };
 
-        fetch(`https://raw.githubusercontent.com/${CONFIG.USER}/${CONFIG.REPO}/main/${CONFIG.DB_FILE}`)
-            .then(r => r.text())
-            .then(text => {
-                const posts = JSON.parse(text);
-                const grid = document.getElementById('posts');
-                grid.innerHTML = '';
+        // INICIALIZAÇÃO
+        let quill, posts = [], sha = null, activeIdx = -1;
+        const btnLogin = document.getElementById('btnLogin');
+        const tokenInput = document.getElementById('tokenInput');
+
+        try {
+            quill = new Quill('#editor', {
+                theme: 'snow',
+                placeholder: 'Escreva aqui...',
+                modules: {
+                    toolbar: [
+                        [{ 'header': [2, 3, false] }],
+                        ['bold', 'italic', 'underline', 'link', 'blockquote'],
+                        [{ 'align': [] }, { 'color': [] }],
+                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                        ['image', 'video'],
+                        ['clean']
+                    ]
+                }
+            });
+        } catch(e) {}
+
+        if(localStorage.getItem('gh_token')) tokenInput.value = localStorage.getItem('gh_token');
+
+        btnLogin.addEventListener('click', () => {
+            const val = tokenInput.value.trim();
+            if(!val) return alert("Token vazio!");
+            localStorage.setItem('gh_token', val);
+            startApp();
+        });
+
+        document.getElementById('btnReset').addEventListener('click', () => {
+            localStorage.removeItem('gh_token'); location.reload();
+        });
+
+        function startApp() {
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('app').style.opacity = '1';
+            document.getElementById('app').style.visibility = 'visible';
+            loadDB();
+        }
+
+        async function loadDB() {
+            const token = localStorage.getItem('gh_token');
+            try {
+                const url = `https://api.github.com/repos/${CONFIG.USER}/${CONFIG.REPO}/contents/${CONFIG.DB_FILE}`;
+                const res = await fetch(url, { headers: { 'Authorization': `token ${token}` } });
+                if(res.status === 404) { posts = []; renderList(); return; }
+                const data = await res.json();
+                sha = data.sha;
+                try { posts = JSON.parse(decodeURIComponent(escape(atob(data.content)))); } catch(e) { posts = JSON.parse(atob(data.content)); }
+                renderList();
+            } catch(e) { document.getElementById('postList').innerHTML = "Erro ao carregar."; }
+        }
+
+        function renderList() {
+            const list = document.getElementById('postList'); list.innerHTML = '';
+            posts.forEach((p, i) => {
+                const isPub = p.status === 'published';
+                list.innerHTML += `<div class="post-item ${i===activeIdx?'active':''}" onclick="openPost(${i})">
+                    <span class="post-title">${p.title}</span>
+                    <span style="font-size:10px;color:${isPub?'#02BF93':'orange'}">● ${isPub?'Publicado':'Rascunho'}</span>
+                </div>`;
+            });
+        }
+
+        function newPost() {
+            activeIdx = -1;
+            document.getElementById('postTitle').value = '';
+            document.getElementById('postImage').value = '';
+            quill.root.innerHTML = '';
+            document.getElementById('btnDel').style.display = 'none';
+            renderList();
+        }
+
+        function openPost(i) {
+            activeIdx = i;
+            const p = posts[i];
+            document.getElementById('postTitle').value = p.title;
+            document.getElementById('postImage').value = p.image || '';
+            quill.root.innerHTML = p.content;
+            document.getElementById('btnDel').style.display = 'block';
+            renderList();
+        }
+
+        async function save(status) {
+            const title = document.getElementById('postTitle').value;
+            if(!title) return alert("Título obrigatório!");
+            const token = localStorage.getItem('gh_token');
+            const slug = title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+            
+            let manualImg = document.getElementById('postImage').value;
+            if(!manualImg) {
+                const d = document.createElement('div'); d.innerHTML = quill.root.innerHTML;
+                const img = d.querySelector('img'); if(img) manualImg = img.src;
+            }
+
+            const postData = {
+                title, slug, status,
+                image: manualImg,
+                date: new Date().toLocaleDateString('pt-BR'),
+                snippet: quill.getText().substring(0, 120) + '...',
+                content: quill.root.innerHTML
+            };
+
+            if(activeIdx > -1) posts[activeIdx] = postData; else { posts.unshift(postData); activeIdx = 0; }
+
+            try {
+                const jsonB64 = btoa(unescape(encodeURIComponent(JSON.stringify(posts, null, 2))));
+                await fetch(`https://api.github.com/repos/${CONFIG.USER}/${CONFIG.REPO}/contents/${CONFIG.DB_FILE}`, {
+                    method: 'PUT',
+                    headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: 'Save', content: jsonB64, sha: sha })
+                }).then(r=>r.json()).then(d=>{sha=d.content.sha});
+
+                if(status === 'published') await saveHtml(postData);
+                alert("Salvo!"); renderList();
+            } catch(e) { alert("Erro: " + e.message); }
+        }
+
+        async function saveHtml(post) {
+            const token = localStorage.getItem('gh_token');
+            let htmlSha = null;
+            try {
+                const c = await fetch(`https://api.github.com/repos/${CONFIG.USER}/${CONFIG.REPO}/contents/posts/${post.slug}.html`, { headers: {'Authorization':`token ${token}`} });
+                if(c.ok) { const d = await c.json(); htmlSha = d.sha; }
+            } catch(e){}
+
+            const words = post.content.replace(/<[^>]*>/g, '').split(/\s+/).length;
+            const readTime = Math.ceil(words / 200);
+
+            // TEMPLATE DO POST SEM CAPA DUPLICADA E COM BOTÃO 'TOP'
+            const tpl = `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>${post.title}</title>
+            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1879074686301515" crossorigin="anonymous"><\/script>
+            <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;800&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+            <style>
+                :root { --primary: #02BF93; --dark: #0f172a; --bg: #f8fafc; }
+                body{font-family:'Merriweather',serif;margin:0;color:#334155;background:var(--bg);line-height:1.9}
+                #progress-bar { position:fixed; top:0; left:0; width:0%; height:4px; background:var(--primary); z-index:1000; transition:width 0.1s; }
                 
-                const pub = posts.filter(p => p.status === 'published');
-                if(pub.length === 0) { grid.innerHTML = '<p style="text-align:center;width:100%">Nenhum post.</p>'; return; }
+                header{background:#fff;padding:20px 0;border-bottom:1px solid #e2e8f0;position:sticky;top:0;z-index:900}
+                .logo{color:var(--dark);font-family:'Outfit',sans-serif;font-weight:800;font-size:24px;text-decoration:none;display:block;text-align:center}
+                .logo span{color:var(--primary)}
+                
+                .container { max-width:1140px; margin:0 auto; padding:40px 20px; display:grid; grid-template-columns: 2.5fr 1fr; gap:60px; }
+                .article-header { margin-bottom:20px; text-align:center; }
+                .cat-tag { background:rgba(2,191,147,0.1); color:var(--primary); padding:6px 12px; border-radius:50px; font-family:'Outfit'; font-size:12px; font-weight:700; text-transform:uppercase; display:inline-block; margin-bottom:15px; }
+                h1 { font-family:'Outfit',sans-serif; font-size:42px; color:var(--dark); line-height:1.1; margin:0 0 20px 0; }
+                .meta { font-family:'Outfit',sans-serif; color:#64748b; font-size:14px; display:flex; align-items:center; justify-content:center; gap:20px; border-bottom:1px solid #eee; padding-bottom:30px; margin-bottom:40px; }
+                
+                .content { font-size:18px; color:#1e293b; }
+                .content img { max-width:100%; height:auto; border-radius:12px; margin:30px 0; display:block; }
+                
+                .sidebar { position:sticky; top:100px; height:fit-content; }
+                .widget-title { font-family:'Outfit'; font-size:14px; font-weight:800; text-transform:uppercase; color:#94a3b8; letter-spacing:1px; margin-bottom:20px; display:block; }
+                .news-card { background:#fff; padding:20px; border-radius:12px; margin-bottom:15px; border:1px solid #e2e8f0; transition:0.3s; display:block; text-decoration:none; }
+                .news-card:hover { transform:translateY(-3px); border-color:var(--primary); }
+                .nc-title { font-family:'Outfit'; font-weight:700; font-size:16px; color:var(--dark); }
+                .nc-date { font-size:12px; color:#94a3b8; margin-top:8px; display:block; }
+                
+                /* BOTÃO TOP */
+                #btnTop { display:none; position:fixed; bottom:20px; left:20px; z-index:99; border:none; outline:none; background:var(--primary); color:#000; cursor:pointer; padding:15px; border-radius:50%; width:50px; height:50px; font-size:18px; box-shadow:0 4px 10px rgba(0,0,0,0.2); transition:0.3s; }
+                #btnTop:hover { background:var(--dark); color:#fff; transform:translateY(-3px); }
 
-                pub.forEach(p => {
-                    const img = p.image ? `<img src="${p.image}" class="card-img">` : `<div class="card-img" style="background:#f1f5f9;display:flex;align-items:center;justify-content:center;color:#cbd5e1"><i class="fa-solid fa-image fa-2x"></i></div>`;
-                    
-                    grid.innerHTML += `
-                        <a href="posts/${p.slug}.html" class="card">
-                            <div class="card-img-wrapper">${img}</div>
-                            <div class="card-body">
-                                <div><span class="date">${p.date}</span></div>
-                                <h2 class="title">${p.title}</h2>
-                                <p class="excerpt">${p.snippet}</p>
-                                <div class="read-more">Ler Artigo <i class="fa-solid fa-arrow-right"></i></div>
+                footer { background:var(--dark); color:#94a3b8; text-align:center; padding:80px 0; margin-top:80px; font-family:'Outfit'; }
+                footer a { color:#fff; text-decoration:none; margin:0 15px; }
+                @media(max-width:900px) { .container{grid-template-columns:1fr;} }
+            </style></head>
+            <body>
+                <div id="progress-bar"></div>
+                <button onclick="topFunction()" id="btnTop" title="Ir ao topo"><i class="fa-solid fa-arrow-up"></i></button>
+
+                <header><a href="../index.html" class="logo">KYNTO<span>BLOG</span></a></header>
+                <div class="container">
+                    <article>
+                        <header class="article-header">
+                            <span class="cat-tag">Tecnologia</span>
+                            <h1>${post.title}</h1>
+                            <div class="meta">
+                                <span><i class="fa-regular fa-calendar"></i> ${post.date}</span>
+                                <span><i class="fa-regular fa-clock"></i> ${readTime} min leitura</span>
                             </div>
-                        </a>
-                    `;
-                });
-            })
-            .catch(e => document.getElementById('posts').innerHTML = '<p style="color:red;text-align:center">Erro.</p>');
-    </script>
+                        </header>
+                        
+                        <div style="background:#f1f5f9;padding:20px;text-align:center;color:#999;margin-bottom:30px;border-radius:8px">Publicidade Google (Topo)</div>
+                        <div class="content">${post.content}</div>
+                        <div style="background:#f1f5f9;padding:20px;text-align:center;color:#999;margin-top:30px;border-radius:8px">Publicidade Google (Fim)</div>
+                    </article>
+                    <aside class="sidebar">
+                        <span class="widget-title">Últimas Notícias</span>
+                        <div id="sidebar-news">Carregando...</div>
+                        <div style="background:#e2e8f0;height:300px;border-radius:12px;margin-top:40px;display:flex;align-items:center;justify-content:center;color:#999">Publicidade Vertical</div>
+                    </aside>
+                </div>
+                <footer>
+                    <p>&copy; 2026 Kynto Soluções.</p>
+                    <div style="margin-top:20px"><a href="https://kynto.com.br">Home</a> <a href="../index.html">Blog</a></div>
+                </footer>
+                <script>
+                    // Scroll Progress & Button Visibility
+                    window.onscroll = function() {
+                        var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+                        var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                        document.getElementById("progress-bar").style.width = (winScroll / height) * 100 + "%";
+                        
+                        // Show/Hide Button
+                        if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                            document.getElementById("btnTop").style.display = "block";
+                        } else {
+                            document.getElementById("btnTop").style.display = "none";
+                        }
+                    };
 
+                    function topFunction() {
+                        window.scrollTo({top: 0, behavior: 'smooth'});
+                    }
+
+                    fetch('../db.json').then(r=>r.json()).then(p=>{
+                        const c=document.getElementById('sidebar-news');c.innerHTML='';
+                        const o=p.filter(x=>x.slug!=='${post.slug}'&&x.status==='published').slice(0,5);
+                        o.forEach(i=>{c.innerHTML+= \`<a href="\${i.slug}.html" class="news-card"><div class="nc-title">\${i.title}</div><span class="nc-date">\${i.date}</span></a>\`});
+                    });
+                <\/script></body></html>`;
+
+            const b64 = btoa(unescape(encodeURIComponent(tpl)));
+            await fetch(`https://api.github.com/repos/${CONFIG.USER}/${CONFIG.REPO}/contents/posts/${post.slug}.html`, {
+                method: 'PUT',
+                headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: 'Deploy', content: b64, sha: htmlSha })
+            });
+        }
+
+        async function deletePost() {
+            if(!confirm("Tem certeza?")) return;
+            const token = localStorage.getItem('gh_token');
+            posts.splice(activeIdx, 1);
+            activeIdx = -1;
+            const jsonB64 = btoa(unescape(encodeURIComponent(JSON.stringify(posts, null, 2))));
+            await fetch(`https://api.github.com/repos/${CONFIG.USER}/${CONFIG.REPO}/contents/${CONFIG.DB_FILE}`, {
+                method: 'PUT',
+                headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: 'Delete', content: jsonB64, sha: sha })
+            });
+            location.reload();
+        }
+    </script>
 </body>
 </html>
