@@ -3,220 +3,153 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kynto Admin | Editor Pro</title>
-    
+    <title>Kynto Admin | Studio</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     
     <style>
-        /* --- RESET E VARIAVEIS --- */
-        :root { 
-            --bg: #0f172a; 
-            --panel: #1e293b; 
-            --primary: #02BF93; 
-            --text: #f8fafc; 
-            --border: #334155; 
-        }
-        body { margin:0; padding:0; font-family:'Outfit', sans-serif; background:var(--bg); color:var(--text); height:100vh; overflow:hidden; display:flex; }
+        /* --- ESTILO DO ADMIN --- */
+        :root { --bg: #0f172a; --panel: #1e293b; --primary: #02BF93; --text: #f8fafc; --border: #334155; }
+        body { margin:0; padding:0; font-family:'Outfit',sans-serif; background:var(--bg); color:var(--text); height:100vh; overflow:hidden; display:flex; }
         
-        /* --- TELA DE LOGIN --- */
-        #login-screen { position:fixed; top:0; left:0; width:100%; height:100%; background:var(--bg); z-index:9999; display:flex; align-items:center; justify-content:center; flex-direction:column; }
+        /* Login */
+        #login-screen { position:fixed; top:0; left:0; width:100%; height:100%; background:var(--bg); z-index:999; display:flex; align-items:center; justify-content:center; flex-direction:column; }
         .box { background:var(--panel); padding:40px; border-radius:12px; width:100%; max-width:350px; text-align:center; border:1px solid var(--border); box-shadow:0 20px 60px rgba(0,0,0,0.5); }
-        .box h2 { color:var(--primary); margin-bottom:20px; }
-        .box input { width:100%; padding:12px; margin-bottom:15px; background:var(--bg); border:1px solid var(--border); color:#fff; border-radius:6px; outline:none; }
+        .box input { width:100%; padding:12px; margin:20px 0; background:var(--bg); border:1px solid var(--border); color:#fff; border-radius:6px; outline:none; }
         .box button { width:100%; padding:12px; background:var(--primary); color:#000; font-weight:800; border:none; border-radius:6px; cursor:pointer; }
         .reset { margin-top:20px; font-size:12px; color:#64748b; cursor:pointer; text-decoration:underline; }
 
-        /* --- SIDEBAR (Barra Lateral) --- */
+        /* Sidebar */
         .sidebar { width:280px; background:var(--panel); border-right:1px solid var(--border); padding:20px; display:flex; flex-direction:column; z-index:20; }
         .brand { font-size:22px; font-weight:800; color:#fff; margin-bottom:20px; display:flex; align-items:center; gap:10px; }
-        .brand i { color:var(--primary); }
-        
-        .btn-new { background:var(--primary); color:#000; width:100%; padding:12px; border-radius:6px; font-weight:700; border:none; cursor:pointer; margin-bottom:20px; transition:0.2s; display:flex; align-items:center; justify-content:center; gap:8px; }
-        .btn-new:hover { transform:translateY(-2px); box-shadow:0 4px 10px rgba(2,191,147,0.3); }
-
-        .section-title { font-size:11px; text-transform:uppercase; color:#64748b; font-weight:700; margin-top:20px; margin-bottom:10px; letter-spacing:1px; }
-        
-        .resources-grid { display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:20px; }
-        .res-btn { background:rgba(255,255,255,0.05); color:#cbd5e1; text-decoration:none; padding:8px; border-radius:4px; font-size:12px; text-align:center; transition:0.2s; border:1px solid transparent; }
-        .res-btn:hover { background:rgba(255,255,255,0.1); color:#fff; border-color:#64748b; }
-        
+        .btn-new { background:var(--primary); color:#000; width:100%; padding:12px; border-radius:6px; font-weight:700; border:none; cursor:pointer; margin-bottom:20px; transition:0.2s; }
         .post-list { flex:1; overflow-y:auto; }
         .post-item { padding:12px; margin-bottom:5px; border-radius:6px; cursor:pointer; background:rgba(255,255,255,0.03); border-left:3px solid transparent; transition:0.2s; }
         .post-item:hover { background:rgba(255,255,255,0.08); }
         .post-item.active { background:rgba(2, 191, 147, 0.1); border-left-color:var(--primary); }
-        .post-title { font-size:13px; font-weight:600; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:#f1f5f9; }
-        .post-status { font-size:10px; color:#94a3b8; margin-top:3px; display:block; }
+        .post-title { font-size:13px; font-weight:600; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 
-        /* --- ÁREA PRINCIPAL --- */
-        .main { flex:1; display:flex; flex-direction:column; background:#f1f5f9; position:relative; min-width:0; }
-        
+        /* Main */
+        .main { flex:1; display:flex; flex-direction:column; background:#f1f5f9; }
         .topbar { height:60px; background:#fff; border-bottom:1px solid #cbd5e1; display:flex; align-items:center; justify-content:flex-end; padding:0 30px; gap:10px; }
-        .btn-action { padding:8px 20px; border-radius:6px; font-size:13px; font-weight:700; cursor:pointer; border:1px solid #cbd5e1; background:#fff; color:#334155; transition:0.2s; }
-        .btn-action:hover { background:#f8fafc; border-color:#94a3b8; }
+        .btn { padding:8px 20px; border-radius:6px; font-size:13px; font-weight:700; cursor:pointer; border:1px solid #cbd5e1; background:#fff; color:#334155; }
         .btn-pub { background:var(--primary); border-color:var(--primary); color:#000; }
-        .btn-pub:hover { filter:brightness(1.05); }
         .btn-del { color:#ef4444; border-color:rgba(239,68,68,0.2); }
-        .btn-del:hover { background:#fef2f2; }
 
-        /* --- EDITOR (CORREÇÃO DE SCROLL E CORES) --- */
-        .editor-wrapper { 
-            flex:1; 
-            overflow-y:auto; /* Permite rolar a página inteira */
-            padding:40px; 
-            display:flex; 
-            justify-content:center;
-            scroll-behavior: smooth;
-        }
-        
-        .paper { 
-            background:#fff; 
-            width:100%; 
-            max-width:850px; 
-            min-height:1000px; /* Altura mínima garantida */
-            height: fit-content; /* Cresce com o conteúdo */
-            box-shadow:0 10px 30px rgba(0,0,0,0.08); 
-            border-radius:8px; 
-            display:flex; 
-            flex-direction:column;
-            margin-bottom: 50px; /* Espaço no final pra não colar */
-        }
-        
+        /* Editor */
+        .editor-wrapper { flex:1; overflow-y:auto; padding:40px; display:flex; justify-content:center; }
+        .paper { background:#fff; width:100%; max-width:850px; min-height:100%; box-shadow:0 10px 30px rgba(0,0,0,0.08); border-radius:8px; display:flex; flex-direction:column; margin-bottom:50px; }
         .meta-inputs { padding:40px 40px 10px 40px; }
         .input-title { width:100%; font-size:36px; font-weight:800; border:none; outline:none; color:#0f172a; font-family:'Outfit'; margin-bottom:20px; line-height:1.2; }
-        .input-title::placeholder { color:#cbd5e1; }
-        
-        .input-img-group { display:flex; gap:10px; background:#f8fafc; padding:5px; border-radius:6px; border:1px solid #e2e8f0; }
-        .input-url { flex:1; padding:10px; background:transparent; border:none; font-size:13px; color:#334155; outline:none; }
-        .icon-helper { padding:10px; color:#94a3b8; font-size:14px; }
+        .input-url { width:100%; padding:10px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px; font-size:13px; color:#334155; outline:none; }
 
-        /* Quill Fixes */
-        .ql-toolbar { border:none!important; border-bottom:1px solid #f1f5f9!important; padding:15px 40px!important; position:sticky; top:0; background:#fff; z-index:100; border-radius: 8px 8px 0 0; }
-        .ql-container { border:none!important; font-size:18px; font-family:'Merriweather', serif; }
-        
-        /* COR DO TEXTO E ESPAÇAMENTO */
-        .ql-editor { padding:40px; color:#1e293b; line-height:1.8; min-height:500px; overflow-y: visible; }
-        .ql-editor p { margin-bottom:15px; }
-        .ql-editor img { max-width:100%; border-radius:8px; margin:20px 0; display:block; box-shadow:0 5px 15px rgba(0,0,0,0.1); }
-        .ql-editor blockquote { border-left:4px solid var(--primary); padding-left:15px; font-style:italic; background:#f0fdfa; padding:15px; }
+        /* Ajustes do Editor */
+        .ql-toolbar { border:none!important; border-bottom:1px solid #f1f5f9!important; padding:15px 40px!important; position:sticky; top:0; background:#fff; z-index:100; border-radius:8px 8px 0 0; }
+        .ql-container { border:none!important; font-size:18px; font-family:'Merriweather',serif; }
+        .ql-editor { padding:40px; color:#1e293b; line-height:1.8; min-height:500px; }
+        /* Garante que imagens fiquem dentro do papel */
+        .ql-editor img { max-width:100%; height:auto; border-radius:8px; display:block; margin:20px auto; }
     </style>
 </head>
 <body>
 
     <div id="login-screen">
         <div class="box">
-            <h2><i class="fa-solid fa-lock"></i> KYNTO ADMIN</h2>
+            <h2>🔐 ADMIN</h2>
             <input type="password" id="tokenInput" placeholder="Token GitHub">
-            <button id="btnLogin">ENTRAR</button>
-            <div class="reset" id="btnReset">Limpar senha salva</div>
+            <button id="btnLogin">ACESSAR</button>
+            <div class="reset" id="btnReset">Limpar senha</div>
         </div>
     </div>
 
-    <div class="sidebar">
-        <div class="brand"><i class="fa-solid fa-cube"></i> KYNTO</div>
-        <button class="btn-new" onclick="newPost()"><i class="fa-solid fa-plus"></i> Novo Post</button>
-        
-        <div class="section-title">Atalhos Úteis (Grátis)</div>
-        <div class="resources-grid">
-            <a href="https://www.pexels.com/pt-br/" target="_blank" class="res-btn" title="Fotos Gratuitas"><i class="fa-solid fa-camera"></i> Pexels</a>
-            <a href="https://unsplash.com/pt-br" target="_blank" class="res-btn" title="Fotos Gratuitas"><i class="fa-solid fa-image"></i> Unsplash</a>
-            <a href="https://fontawesome.com/search?o=r&m=free" target="_blank" class="res-btn" title="Ícones"><i class="fa-solid fa-icons"></i> Ícones</a>
-            <a href="https://emoji.gg/" target="_blank" class="res-btn" title="Emojis"><i class="fa-regular fa-face-smile"></i> Emojis</a>
-        </div>
-
-        <div class="section-title">Seus Artigos</div>
-        <div class="post-list" id="postList">Carregando...</div>
-    </div>
-
-    <div class="main" id="app">
-        <div class="topbar">
-            <button class="btn-action btn-del" onclick="deletePost()" id="btnDel" style="display:none"><i class="fa-solid fa-trash"></i></button>
-            <button class="btn-action" onclick="save('draft')"><i class="fa-regular fa-floppy-disk"></i> Rascunho</button>
-            <button class="btn-action btn-pub" onclick="save('published')"><i class="fa-solid fa-paper-plane"></i> Publicar</button>
+    <div id="app">
+        <div class="sidebar">
+            <div class="brand"><i class="fa-solid fa-cube"></i> KYNTO</div>
+            <button class="btn-new" onclick="newPost()">+ Novo Artigo</button>
+            <div class="post-list" id="postList">Carregando...</div>
         </div>
         
-        <div class="editor-wrapper">
-            <div class="paper">
-                <div class="meta-inputs">
-                    <input type="text" id="postTitle" class="input-title" placeholder="Digite o Título do Artigo...">
-                    
-                    <div class="input-img-group">
-                        <i class="fa-solid fa-link icon-helper"></i>
-                        <input type="text" id="postImage" class="input-url" placeholder="Cole o link da Imagem de Capa aqui (Opcional - Se vazio, pega a 1ª foto do texto)">
+        <div class="content main">
+            <div class="topbar">
+                <button class="btn btn-del" onclick="deletePost()" id="btnDel" style="display:none">Excluir</button>
+                <button class="btn" onclick="save('draft')">Rascunho</button>
+                <button class="btn btn-pub" onclick="save('published')">Publicar</button>
+            </div>
+            
+            <div class="editor-wrapper">
+                <div class="paper">
+                    <div class="meta-inputs">
+                        <input type="text" id="postTitle" class="input-title" placeholder="Digite o Título...">
+                        <input type="text" id="postImage" class="input-url" placeholder="Capa Opcional (URL da imagem)">
                     </div>
+                    <div id="editor"></div>
                 </div>
-                <div id="editor"></div>
             </div>
         </div>
     </div>
 
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <script>
-        // CONFIGURAÇÃO
+        // === LOGIN E EDITOR ===
+        const btnLogin = document.getElementById('btnLogin');
+        const tokenInput = document.getElementById('tokenInput');
+        let quill;
+
+        try {
+            quill = new Quill('#editor', {
+                theme: 'snow',
+                placeholder: 'Escreva seu artigo aqui...',
+                modules: {
+                    toolbar: [
+                        [{ 'header': [2, 3, false] }],
+                        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+                        [{ 'align': [] }, { 'color': [] }],
+                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                        ['link', 'image', 'video'],
+                        ['clean']
+                    ]
+                }
+            });
+        } catch(e) { console.error(e); }
+
+        if(localStorage.getItem('gh_token')) tokenInput.value = localStorage.getItem('gh_token');
+
+        btnLogin.addEventListener('click', () => {
+            const val = tokenInput.value.trim();
+            if(!val) return alert("Token vazio!");
+            localStorage.setItem('gh_token', val);
+            startApp();
+        });
+
+        document.getElementById('btnReset').addEventListener('click', () => {
+            localStorage.removeItem('gh_token'); location.reload();
+        });
+
+        // === LÓGICA DO SISTEMA ===
         const CONFIG = {
             USER: 'brunodalolio88-svg', 
             REPO: 'blog',       
             DB_FILE: 'db.json'
         };
 
-        let posts = [], sha = null, activeIdx = -1, token = localStorage.getItem('gh_token') || '', quill;
-
-        // INICIALIZAÇÃO
-        window.addEventListener('DOMContentLoaded', () => {
-            // Editor com Cores e Alinhamento
-            try {
-                quill = new Quill('#editor', {
-                    theme: 'snow',
-                    placeholder: 'Escreva seu conteúdo...',
-                    modules: {
-                        toolbar: [
-                            [{ 'header': [2, 3, false] }],
-                            ['bold', 'italic', 'underline', 'strike'],
-                            [{ 'color': [] }, { 'background': [] }], // CORES
-                            [{ 'align': [] }], // ALINHAMENTO
-                            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                            ['link', 'image', 'video'],
-                            ['clean']
-                        ]
-                    }
-                });
-            } catch(e) { console.error(e); }
-
-            // Login
-            const btnLogin = document.getElementById('btnLogin');
-            if(token) document.getElementById('tokenInput').value = token;
-
-            btnLogin.addEventListener('click', () => {
-                const val = document.getElementById('tokenInput').value.trim();
-                if(!val) return alert("Token vazio!");
-                token = val; localStorage.setItem('gh_token', val);
-                startApp();
-            });
-
-            document.getElementById('btnReset').addEventListener('click', () => {
-                localStorage.removeItem('gh_token'); location.reload();
-            });
-        });
+        let posts = [], sha = null, activeIdx = -1;
 
         function startApp() {
             document.getElementById('login-screen').style.display = 'none';
-            // Em vez de classe, mudei o display direto pra garantir
             document.getElementById('app').style.opacity = '1';
             document.getElementById('app').style.visibility = 'visible';
             loadDB();
         }
 
-        // CARREGAR POSTS
         async function loadDB() {
             const list = document.getElementById('postList');
+            const token = localStorage.getItem('gh_token');
             try {
                 const url = `https://api.github.com/repos/${CONFIG.USER}/${CONFIG.REPO}/contents/${CONFIG.DB_FILE}`;
                 const res = await fetch(url, { headers: { 'Authorization': `token ${token}` } });
                 
                 if(res.status === 404) { posts = []; renderList(); return; }
-                if(!res.ok) throw new Error("Erro GitHub: " + res.status);
-                
                 const data = await res.json();
                 sha = data.sha;
                 
@@ -225,7 +158,7 @@
                     posts = JSON.parse(decodeURIComponent(escape(raw)));
                 } catch(e) { posts = JSON.parse(atob(data.content)); }
                 renderList();
-            } catch(e) { list.innerHTML = `<p style="color:red;padding:20px;font-size:12px">${e.message}</p>`; }
+            } catch(e) { list.innerHTML = `<p style="color:red;padding:20px;font-size:12px">Erro: ${e.message}</p>`; }
         }
 
         function renderList() {
@@ -236,7 +169,7 @@
                 const isPub = p.status === 'published';
                 list.innerHTML += `<div class="post-item ${i===activeIdx?'active':''}" onclick="openPost(${i})">
                     <span class="post-title">${p.title}</span>
-                    <span class="post-status">● ${isPub?'Publicado':'Rascunho'}</span>
+                    <span style="font-size:10px;color:${isPub?'#02BF93':'orange'}">● ${isPub?'No ar':'Rascunho'}</span>
                 </div>`;
             });
         }
@@ -260,17 +193,16 @@
             renderList();
         }
 
-        // SALVAR
         async function save(status) {
             const title = document.getElementById('postTitle').value;
             if(!title) return alert("Título obrigatório!");
+            const token = localStorage.getItem('gh_token');
 
             const slug = title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
             
-            // Lógica Inteligente de Imagem
+            // Auto-Imagem
             let manualImg = document.getElementById('postImage').value;
             if(!manualImg) {
-                // Tenta pegar a primeira imagem do corpo do texto
                 const tempDiv = document.createElement('div');
                 tempDiv.innerHTML = quill.root.innerHTML;
                 const firstImg = tempDiv.querySelector('img');
@@ -289,10 +221,9 @@
             else { posts.unshift(postData); activeIdx = 0; }
 
             try {
-                const jsonStr = JSON.stringify(posts, null, 2);
-                const jsonB64 = btoa(unescape(encodeURIComponent(jsonStr)));
-                
+                const jsonB64 = btoa(unescape(encodeURIComponent(JSON.stringify(posts, null, 2))));
                 const url = `https://api.github.com/repos/${CONFIG.USER}/${CONFIG.REPO}/contents/${CONFIG.DB_FILE}`;
+                
                 const res = await fetch(url, {
                     method: 'PUT',
                     headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
@@ -303,12 +234,13 @@
 
                 if(status === 'published') await saveHtml(postData);
 
-                alert("Salvo com sucesso!");
+                alert("Salvo!");
                 renderList();
             } catch(e) { alert("Erro: " + e.message); }
         }
 
         async function saveHtml(post) {
+            const token = localStorage.getItem('gh_token');
             let htmlSha = null;
             const url = `https://api.github.com/repos/${CONFIG.USER}/${CONFIG.REPO}/contents/posts/${post.slug}.html`;
             
@@ -317,7 +249,9 @@
                 if(c.ok) { const d = await c.json(); htmlSha = d.sha; }
             } catch(e) {}
 
-            // Template sem duplicar imagem no topo, mas com Ads e Leia Também
+            const imgHtml = post.image ? `<img src="${post.image}" class="cover-img">` : '';
+            
+            // TEMPLATE COM BARRA LATERAL (SIDEBAR)
             const tpl = `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>${post.title}</title>
             <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1879074686301515" crossorigin="anonymous"><\/script>
             <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
@@ -325,34 +259,73 @@
                 body{font-family:'Merriweather',serif;margin:0;color:#334;background:#f8fafc;line-height:1.8}
                 header{background:#0f172a;padding:20px;text-align:center;border-bottom:4px solid #02BF93}
                 .logo{color:#fff;font-family:'Outfit',sans-serif;font-weight:800;font-size:24px;text-decoration:none}
-                .container{max-width:800px;margin:40px auto;padding:0 20px}
-                .box{background:#fff;padding:60px 40px;border-radius:12px;box-shadow:0 10px 40px rgba(0,0,0,0.05);margin-bottom:40px}
-                h1{font-family:'Outfit',sans-serif;font-size:42px;color:#0f172a;line-height:1.2;margin-bottom:10px}
-                .meta{font-family:'Outfit',sans-serif;color:#64748b;font-size:13px;display:block;margin-bottom:30px;padding-bottom:20px;border-bottom:1px solid #eee}
-                .content img{max-width:100%;border-radius:8px}
-                .content blockquote{border-left:4px solid #02BF93;margin:20px 0;padding:15px;background:#f0fdf9;font-style:italic}
-                .ad{background:#f1f5f9;padding:20px;text-align:center;color:#94a3b8;font-size:12px;margin:40px 0;border:1px dashed #cbd5e1;border-radius:8px}
-                .related{margin-top:60px;padding-top:40px;border-top:1px solid #eee}
-                .related h3{font-family:'Outfit',sans-serif;color:#0f172a;margin-bottom:20px}
-                .r-card{display:block;background:#fff;padding:15px;border:1px solid #eee;border-radius:8px;text-decoration:none;margin-bottom:10px;transition:0.3s}
-                .r-card:hover{border-color:#02BF93;transform:translateY(-3px)}
-                .r-title{font-family:'Outfit',sans-serif;font-weight:700;color:#0f172a}
-                footer{background:#0f172a;color:#94a3b8;text-align:center;padding:40px;margin-top:auto}
+                
+                .container { max-width:1100px; margin:40px auto; padding:0 20px; display:grid; grid-template-columns: 2fr 1fr; gap:40px; }
+                
+                /* Coluna Principal */
+                .main-content { background:#fff; padding:40px; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.05); }
+                .cover-img { width:100%; height:auto; border-radius:8px; margin-bottom:30px; }
+                h1 { font-family:'Outfit',sans-serif; font-size:36px; color:#0f172a; line-height:1.2; margin-bottom:10px; }
+                .meta { font-family:'Outfit',sans-serif; color:#64748b; font-size:13px; display:block; margin-bottom:30px; padding-bottom:20px; border-bottom:1px solid #eee; }
+                .content img { max-width:100%; height:auto; border-radius:8px; margin:20px 0; }
+                .ad-slot { background:#f1f5f9; padding:20px; text-align:center; color:#94a3b8; border-radius:8px; margin:30px 0; font-size:12px; border:1px dashed #cbd5e1; }
+
+                /* Barra Lateral */
+                .sidebar { position:sticky; top:20px; height:fit-content; }
+                .widget { background:#fff; padding:20px; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,0.05); margin-bottom:30px; }
+                .widget h3 { font-family:'Outfit',sans-serif; font-size:18px; color:#0f172a; margin-top:0; border-bottom:2px solid #02BF93; padding-bottom:10px; margin-bottom:20px; display:inline-block; }
+                .rec-item { display:block; text-decoration:none; margin-bottom:15px; border-bottom:1px solid #eee; padding-bottom:15px; }
+                .rec-item:last-child { border:none; margin:0; padding:0; }
+                .rec-title { font-family:'Outfit',sans-serif; font-weight:700; color:#334; font-size:15px; line-height:1.4; transition:0.2s; }
+                .rec-item:hover .rec-title { color:#02BF93; }
+                .rec-date { font-size:12px; color:#94a3b8; display:block; margin-top:5px; }
+
+                /* Rodapé */
+                footer { background:#0f172a; color:#94a3b8; text-align:center; padding:50px 20px; margin-top:60px; font-family:'Outfit',sans-serif; }
+                footer a { color:#fff; text-decoration:none; margin:0 10px; font-weight:600; }
+                
+                @media(max-width: 768px) { .container { grid-template-columns: 1fr; } }
             </style></head><body>
             <header><a href="../index.html" class="logo">KYNTO<span style="color:#02BF93">BLOG</span></a></header>
-            <div class="container"><article class="box">
-                <h1>${post.title}</h1><span class="meta">${post.date}</span>
-                <div class="ad">Publicidade Google</div>
-                <div class="content">${post.content}</div>
-                <div class="ad">Publicidade Google</div>
-                <div class="related"><h3>Leia também</h3><div id="rel">...</div></div>
-            </article></div><footer>© 2026 Kynto Soluções</footer>
-            <script>fetch('../db.json').then(r=>r.json()).then(p=>{
-                const c=document.getElementById('rel');c.innerHTML='';
-                const o=p.filter(x=>x.slug!=='${post.slug}'&&x.status==='published').slice(0,3);
-                if(!o.length)c.innerHTML='<small>Sem sugestões</small>';
-                o.forEach(i=>{c.innerHTML+= \`<a href="\${i.slug}.html" class="r-card"><div class="r-title">\${i.title}</div></a>\`});
-            })<\/script></body></html>`;
+            
+            <div class="container">
+                <div class="main-content">
+                    ${imgHtml}
+                    <h1>${post.title}</h1>
+                    <span class="meta">${post.date}</span>
+                    <div class="ad-slot">Publicidade</div>
+                    <div class="content">${post.content}</div>
+                    <div class="ad-slot">Publicidade</div>
+                </div>
+
+                <div class="sidebar">
+                    <div class="widget">
+                        <h3>Últimas Notícias</h3>
+                        <div id="sidebar-posts">Carregando...</div>
+                    </div>
+                    <div class="widget">
+                        <div class="ad-slot" style="margin:0;height:250px">Publicidade</div>
+                    </div>
+                </div>
+            </div>
+
+            <footer>
+                <p>&copy; 2026 Kynto Soluções.</p>
+                <div style="margin-top:15px">
+                    <a href="https://kynto.com.br">Home</a> | 
+                    <a href="../index.html">Blog</a> | 
+                    <a href="https://kynto.com.br/contato">Contato</a>
+                </div>
+            </footer>
+
+            <script>
+                fetch('../db.json').then(r=>r.json()).then(p=>{
+                    const c=document.getElementById('sidebar-posts');c.innerHTML='';
+                    const o=p.filter(x=>x.slug!=='${post.slug}'&&x.status==='published').slice(0,5);
+                    if(!o.length)c.innerHTML='<small>Sem outros artigos.</small>';
+                    o.forEach(i=>{c.innerHTML+= \`<a href="\${i.slug}.html" class="rec-item"><div class="rec-title">\${i.title}</div><span class="rec-date">\${i.date}</span></a>\`});
+                })
+            <\/script></body></html>`;
 
             const b64 = btoa(unescape(encodeURIComponent(tpl)));
             await fetch(url, {
@@ -364,6 +337,7 @@
 
         async function deletePost() {
             if(!confirm("Tem certeza?")) return;
+            const token = localStorage.getItem('gh_token');
             posts.splice(activeIdx, 1);
             activeIdx = -1;
             try {
