@@ -37,8 +37,25 @@
         .ad-container { margin: 20px auto 40px; text-align: center; }
         .ad-banner { background: #e2e8f0; height: 100px; max-width: 728px; margin: 0 auto; display: flex; align-items: center; justify-content: center; color: #94a3b8; border-radius: 8px; font-size: 12px; border: 1px dashed #cbd5e1; }
 
-        /* GRID & CARDS */
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; margin-bottom: 40px; min-height: 300px; }
+        /* GRID & CARDS (AJUSTADO PARA 3 COLUNAS) */
+        .grid { 
+            display: grid; 
+            gap: 30px; 
+            margin-bottom: 40px; 
+            min-height: 300px;
+            /* Padrão Mobile (1 Coluna) */
+            grid-template-columns: 1fr; 
+        }
+
+        /* Tablet (2 Colunas) */
+        @media (min-width: 600px) {
+            .grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        /* Desktop (3 Colunas Fixas) */
+        @media (min-width: 992px) {
+            .grid { grid-template-columns: repeat(3, 1fr); }
+        }
         
         .card { background: var(--card-bg); border-radius: 12px; overflow: hidden; transition: 0.3s; display: flex; flex-direction: column; border: 1px solid #e2e8f0; text-decoration: none; color: inherit; height: 100%; box-shadow: 0 2px 5px rgba(0,0,0,0.02); opacity: 0; animation: fadeUp 0.6s forwards; }
         .card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.08); border-color: var(--green); }
@@ -138,12 +155,10 @@
         fetch(`https://raw.githubusercontent.com/${CONFIG.USER}/${CONFIG.REPO}/main/${CONFIG.DB_FILE}`)
             .then(r => r.text())
             .then(text => {
-                // Parse simples para evitar erros de formatação
                 const data = JSON.parse(text);
-                // Filtra apenas publicados
                 allPosts = data.filter(p => p.status === 'published');
                 
-                grid.innerHTML = ''; // Limpa skeletons
+                grid.innerHTML = ''; 
                 
                 if(allPosts.length === 0) {
                     grid.innerHTML = '<div class="no-results">Ainda não há publicações.</div>';
@@ -155,7 +170,6 @@
             .catch(e => grid.innerHTML = '<div class="no-results" style="color:#ef4444">Erro ao conectar com o banco de dados.</div>');
 
         function renderPosts(filter = '') {
-            // Se estiver filtrando, limpa tudo primeiro
             if(filter) {
                 grid.innerHTML = '';
                 const filtered = allPosts.filter(p => p.title.toLowerCase().includes(filter.toLowerCase()));
@@ -165,14 +179,12 @@
                     return;
                 }
                 filtered.forEach((p, i) => createCard(p, i));
-                loadBtn.classList.add('hidden'); // Esconde paginação na busca
+                loadBtn.classList.add('hidden');
             } else {
-                // Modo normal (Paginação)
                 const nextBatch = allPosts.slice(displayedCount, displayedCount + POSTS_PER_PAGE);
                 nextBatch.forEach((p, i) => createCard(p, i));
                 displayedCount += nextBatch.length;
                 
-                // Controle do botão "Carregar Mais"
                 if(displayedCount >= allPosts.length) {
                     loadBtn.classList.add('hidden');
                 } else {
@@ -199,7 +211,6 @@
             grid.insertAdjacentHTML('beforeend', html);
         }
 
-        // Eventos
         loadBtn.addEventListener('click', () => renderPosts());
         
         searchInput.addEventListener('input', (e) => {
