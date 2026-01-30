@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kynto Admin | Final</title>
+    <title>Kynto Admin | Mobile Fix</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     
     <style>
+        /* ADMIN STYLE */
         :root { --bg: #f1f5f9; --panel: #1e293b; --primary: #02BF93; --text: #334155; }
         body { margin:0; padding:0; font-family:'Outfit',sans-serif; background:var(--bg); color:var(--text); height:100vh; overflow:hidden; display:flex; }
         
@@ -92,7 +93,6 @@
             DB_FILE: 'db.json'
         };
 
-        // INICIALIZAÇÃO
         let quill, posts = [], sha = null, activeIdx = -1;
         const btnLogin = document.getElementById('btnLogin');
         const tokenInput = document.getElementById('tokenInput');
@@ -225,6 +225,9 @@
             const words = post.content.replace(/<[^>]*>/g, '').split(/\s+/).length;
             const readTime = Math.ceil(words / 200);
 
+            // ============================================
+            // TEMPLATE DO POST - AGORA 100% RESPONSIVO
+            // ============================================
             const tpl = `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
             <title>${post.title}</title>
             <meta name="description" content="${post.snippet}">
@@ -233,22 +236,32 @@
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
             <style>
                 :root { --primary: #02BF93; --dark: #0f172a; --bg: #f8fafc; }
-                body{font-family:'Merriweather',serif;margin:0;color:#334155;background:var(--bg);line-height:1.9}
+                body{font-family:'Merriweather',serif;margin:0;color:#334155;background:var(--bg);line-height:1.9;overflow-x:hidden;}
                 #progress-bar { position:fixed; top:0; left:0; width:0%; height:4px; background:var(--primary); z-index:1000; transition:width 0.1s; }
                 
                 header{background:#fff;padding:20px 0;border-bottom:1px solid #e2e8f0;position:sticky;top:0;z-index:900}
                 .logo{color:var(--dark);font-family:'Outfit',sans-serif;font-weight:800;font-size:24px;text-decoration:none;display:block;text-align:center}
                 .logo span{color:var(--primary)}
                 
+                /* Container Responsivo */
                 .container { max-width:1140px; margin:0 auto; padding:40px 20px; display:grid; grid-template-columns: 2.5fr 1fr; gap:60px; }
+                
+                @media (max-width: 900px) {
+                    .container { grid-template-columns: 1fr; gap:30px; padding:20px; }
+                    h1 { font-size: 32px !important; }
+                    .sidebar { position: static; height: auto; }
+                    .meta { flex-direction: column; gap: 10px; }
+                }
+
                 .article-header { margin-bottom:20px; text-align:center; }
                 .cat-tag { background:rgba(2,191,147,0.1); color:var(--primary); padding:6px 12px; border-radius:50px; font-family:'Outfit'; font-size:12px; font-weight:700; text-transform:uppercase; display:inline-block; margin-bottom:15px; }
-                h1 { font-family:'Outfit',sans-serif; font-size:42px; color:var(--dark); line-height:1.1; margin:0 0 20px 0; }
+                h1 { font-family:'Outfit',sans-serif; font-size:42px; color:var(--dark); line-height:1.2; margin:0 0 20px 0; word-wrap: break-word; }
                 .meta { font-family:'Outfit',sans-serif; color:#64748b; font-size:14px; display:flex; align-items:center; justify-content:center; gap:20px; border-bottom:1px solid #eee; padding-bottom:30px; margin-bottom:40px; }
-                .share-btn { cursor:pointer; color:#02BF93; transition:0.3s; } .share-btn:hover { transform:scale(1.2); }
+                .share-btn { cursor:pointer; color:#02BF93; transition:0.3s; }
                 
-                .content { font-size:18px; color:#1e293b; }
-                .content img { max-width:100%; height:auto; border-radius:12px; margin:30px 0; display:block; }
+                /* Conteúdo Seguro */
+                .content { font-size:18px; color:#1e293b; word-wrap: break-word; overflow-wrap: break-word; }
+                .content img, .content video, .content iframe { max-width:100% !important; height:auto !important; border-radius:12px; margin:30px 0; display:block; }
                 
                 .sidebar { position:sticky; top:100px; height:fit-content; }
                 .widget-title { font-family:'Outfit'; font-size:14px; font-weight:800; text-transform:uppercase; color:#94a3b8; letter-spacing:1px; margin-bottom:20px; display:block; }
@@ -262,7 +275,6 @@
 
                 footer { background:var(--dark); color:#94a3b8; text-align:center; padding:80px 0; margin-top:80px; font-family:'Outfit'; }
                 footer a { color:#fff; text-decoration:none; margin:0 15px; }
-                @media(max-width:900px) { .container{grid-template-columns:1fr;} }
             </style></head>
             <body>
                 <div id="progress-bar"></div>
