@@ -152,7 +152,8 @@
         const loadBtn = document.getElementById('loadMoreBtn');
         const searchInput = document.getElementById('searchInput');
 
-        fetch(`https://raw.githubusercontent.com/${CONFIG.USER}/${CONFIG.REPO}/main/${CONFIG.DB_FILE}`)
+        // ADICIONEI "?t=" + new Date().getTime() PARA QUEBRAR O CACHE
+        fetch(`https://raw.githubusercontent.com/${CONFIG.USER}/${CONFIG.REPO}/main/${CONFIG.DB_FILE}?t=${new Date().getTime()}`)
             .then(r => r.text())
             .then(text => {
                 const data = JSON.parse(text);
@@ -194,6 +195,7 @@
         }
 
         function createCard(p, index) {
+            // Se tiver imagem, mostra. Se não, mostra ícone padrão.
             const img = p.image ? `<img src="${p.image}" class="card-img" loading="lazy">` : `<div class="card-img" style="background:#f1f5f9;display:flex;align-items:center;justify-content:center;color:#cbd5e1"><i class="fa-solid fa-image fa-2x"></i></div>`;
             const delay = index * 0.1;
             
