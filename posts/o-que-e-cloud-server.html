@@ -14,25 +14,27 @@
                 
                 .container { max-width:1140px; margin:0 auto; padding:60px 20px; display:grid; grid-template-columns: 2.5fr 1fr; gap:60px; }
                 
-                /* TÍTULO CORRIGIDO - PREVENÇÃO DE CORTE */
+                /* --- CORREÇÃO DE TÍTULO --- */
                 h1 { 
                     font-family:'Outfit',sans-serif; 
                     font-size:48px; 
                     color:var(--dark); 
                     line-height:1.2; 
                     margin:20px 0 30px 0;
-                    word-wrap: break-word;     /* Quebra em navegadores antigos */
-                    overflow-wrap: break-word; /* Padrão moderno */
-                    word-break: break-word;    /* Força quebra se palavra for muito longa */
-                    hyphens: auto;             /* Adiciona hífen se necessário */
-                    max-width: 100%;           /* Garante que não ultrapasse o container */
+                    
+                    /* Evita quebra de palavras com hífen */
+                    word-wrap: normal;
+                    overflow-wrap: break-word; /* Só quebra se for uma URL gigante */
+                    word-break: normal;        /* Mantém a palavra inteira */
+                    hyphens: none;             /* PROIBIDO HÍFEN */
+                    -webkit-hyphens: none;
+                    -moz-hyphens: none;
                 }
 
                 .article-header { margin-bottom:40px; text-align:center; max-width: 900px; margin-left: auto; margin-right: auto; }
                 
                 .cat-tag { background:rgba(2,191,147,0.1); color:var(--primary); padding:6px 12px; border-radius:50px; font-family:'Outfit'; font-size:12px; font-weight:700; text-transform:uppercase; display:inline-block; }
                 
-                /* ESPAÇAMENTO ENTRE TÍTULO E ARTIGO */
                 .meta { 
                     font-family:'Outfit',sans-serif; 
                     color:#64748b; 
@@ -43,13 +45,13 @@
                     gap:25px; 
                     border-top:1px solid #eee; 
                     border-bottom:1px solid #eee; 
-                    padding:25px 0;   /* Aumentei o padding */
-                    margin-top:35px;  /* Mais distância do título */
+                    padding:25px 0;   
+                    margin-top:35px;  
                     margin-bottom:20px;
                 }
                 .share-btn { cursor:pointer; color:#02BF93; transition:0.3s; }
 
-                /* MOBILE RESPONSIVO - REGRAS ESTRITAS */
+                /* MOBILE RESPONSIVO */
                 @media (max-width: 900px) { 
                     .container { 
                         grid-template-columns: 1fr; 
@@ -60,14 +62,13 @@
                         box-sizing: border-box; 
                     } 
                     h1 { 
-                        font-size: 28px !important; /* Fonte menor para garantir fit */
+                        font-size: 28px !important; 
                         line-height: 1.3 !important; 
                         margin: 15px 0 25px 0; 
                     }
                     .sidebar { margin-top: 50px; position: static; height: auto; }
                     .meta { flex-wrap: wrap; gap: 15px; }
                     
-                    /* Previne vazamento lateral geral */
                     body, html { overflow-x: hidden; max-width: 100%; }
                 }
 
