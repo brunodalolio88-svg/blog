@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog Kynto | Tecnologia</title>
+    <meta name="description" content="Blog Kynto - Notícias, dicas de segurança e infraestrutura de TI para empresas.">
+    <title>Blog Kynto | Tecnologia e Inovação</title>
     
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1879074686301515" crossorigin="anonymous"></script>
     
@@ -12,7 +13,7 @@
     
     <style>
         :root { --dark: #0f172a; --green: #02BF93; --bg: #F8FAFC; --card-bg: #ffffff; }
-        body { font-family: 'Outfit', sans-serif; background: var(--bg); margin: 0; color: #334155; display: flex; flex-direction: column; min-height: 100vh; }
+        body { font-family: 'Outfit', sans-serif; background: var(--bg); margin: 0; color: #334155; display: flex; flex-direction: column; min-height: 100vh; overflow-x: hidden; }
         
         /* HEADER */
         header { background: #fff; padding: 15px 0; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 20px rgba(0,0,0,0.02); }
@@ -22,19 +23,19 @@
         .btn-site { color: var(--dark); text-decoration: none; font-weight: 600; font-size: 13px; border: 2px solid var(--dark); padding: 6px 16px; border-radius: 50px; transition: 0.3s; }
         .btn-site:hover { background: var(--dark); color: #fff; }
 
-        /* HERO (Mais Compacto) */
-        .hero { text-align: center; padding: 40px 0 20px 0; background: linear-gradient(180deg, #fff 0%, #F8FAFC 100%); }
+        /* HERO */
+        .hero { text-align: center; padding: 50px 0 30px 0; background: linear-gradient(180deg, #fff 0%, #F8FAFC 100%); }
         .hero h1 { font-size: 42px; font-weight: 800; color: var(--dark); margin: 0 0 10px 0; letter-spacing: -1.5px; line-height: 1.1; }
         .hero p { font-size: 16px; color: #64748b; max-width: 600px; margin: 0 auto; font-family: 'Merriweather', serif; font-weight: 300; }
 
-        /* ADSENSE (Espaço Otimizado) */
+        /* ADSENSE */
         .ad-container { margin: 20px auto 40px; text-align: center; }
         .ad-banner { background: #e2e8f0; height: 100px; max-width: 728px; margin: 0 auto; display: flex; align-items: center; justify-content: center; color: #94a3b8; border-radius: 8px; font-size: 12px; border: 1px dashed #cbd5e1; }
 
-        /* GRID */
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; margin-bottom: 60px; }
+        /* GRID & CARDS */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; margin-bottom: 60px; }
         
-        .card { background: var(--card-bg); border-radius: 12px; overflow: hidden; transition: 0.3s; display: flex; flex-direction: column; border: 1px solid #e2e8f0; text-decoration: none; color: inherit; height: 100%; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+        .card { background: var(--card-bg); border-radius: 12px; overflow: hidden; transition: 0.3s; display: flex; flex-direction: column; border: 1px solid #e2e8f0; text-decoration: none; color: inherit; height: 100%; box-shadow: 0 2px 5px rgba(0,0,0,0.02); opacity: 0; animation: fadeUp 0.6s forwards; }
         .card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.08); border-color: var(--green); }
         
         .card-img-wrapper { overflow: hidden; height: 180px; position: relative; }
@@ -48,6 +49,13 @@
         .read-more { color: var(--dark); font-weight: 700; font-size: 13px; margin-top: auto; display: flex; align-items: center; gap: 5px; }
         .read-more i { transition: 0.3s; }
         .card:hover .read-more i { transform: translateX(5px); color: var(--green); }
+
+        /* SKELETON LOADING */
+        .skeleton { background: #e2e8f0; border-radius: 12px; height: 350px; position: relative; overflow: hidden; }
+        .skeleton::after { content: ""; position: absolute; top: 0; right: 0; bottom: 0; left: 0; transform: translateX(-100%); background-image: linear-gradient(90deg, rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, 0.2) 20%, rgba(255, 255, 255, 0.5) 60%, rgba(255, 255, 255, 0)); animation: shimmer 2s infinite; }
+
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes shimmer { 100% { transform: translateX(100%); } }
 
         /* FOOTER */
         footer { background: var(--dark); color: #94a3b8; padding: 40px 0 20px; margin-top: auto; border-top: 4px solid var(--green); text-align: center; }
@@ -78,7 +86,9 @@
 
     <div class="container">
         <div id="posts" class="grid">
-            <div style="text-align:center;width:100%;color:#999;grid-column:1/-1;padding:40px;">Carregando...</div>
+            <div class="skeleton"></div>
+            <div class="skeleton"></div>
+            <div class="skeleton"></div>
         </div>
     </div>
 
@@ -110,13 +120,16 @@
                 grid.innerHTML = '';
                 
                 const pub = posts.filter(p => p.status === 'published');
-                if(pub.length === 0) { grid.innerHTML = '<p style="text-align:center;width:100%">Nenhum post.</p>'; return; }
+                if(pub.length === 0) { grid.innerHTML = '<p style="text-align:center;width:100%;grid-column:1/-1">Nenhum post.</p>'; return; }
 
-                pub.forEach(p => {
+                pub.forEach((p, index) => {
                     const img = p.image ? `<img src="${p.image}" class="card-img">` : `<div class="card-img" style="background:#f1f5f9;display:flex;align-items:center;justify-content:center;color:#cbd5e1"><i class="fa-solid fa-image fa-2x"></i></div>`;
                     
+                    // Adicionei um delay na animação para criar efeito cascata
+                    const delay = index * 0.1;
+                    
                     grid.innerHTML += `
-                        <a href="posts/${p.slug}.html" class="card">
+                        <a href="posts/${p.slug}.html" class="card" style="animation-delay: ${delay}s">
                             <div class="card-img-wrapper">${img}</div>
                             <div class="card-body">
                                 <div><span class="date">${p.date}</span></div>
@@ -128,8 +141,7 @@
                     `;
                 });
             })
-            .catch(e => document.getElementById('posts').innerHTML = '<p style="color:red;text-align:center">Erro.</p>');
+            .catch(e => document.getElementById('posts').innerHTML = '<p style="color:red;text-align:center">Erro ao conectar.</p>');
     </script>
-
 </body>
 </html>
