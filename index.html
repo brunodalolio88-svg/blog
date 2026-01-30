@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blog Kynto | Tecnologia</title>
+    
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1879074686301515" crossorigin="anonymous"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Merriweather:wght@300;400&display=swap" rel="stylesheet">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Merriweather:wght@300;400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
@@ -13,45 +15,45 @@
         body { font-family: 'Outfit', sans-serif; background: var(--bg); margin: 0; color: #334155; display: flex; flex-direction: column; min-height: 100vh; }
         
         /* HEADER */
-        header { background: #fff; padding: 20px 0; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 20px rgba(0,0,0,0.02); }
+        header { background: #fff; padding: 15px 0; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 20px rgba(0,0,0,0.02); }
         .container { max-width: 1140px; margin: 0 auto; padding: 0 20px; }
         .nav { display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 24px; font-weight: 800; color: var(--dark); text-decoration: none; letter-spacing: -1px; }
-        .btn-site { color: var(--dark); text-decoration: none; font-weight: 600; font-size: 14px; border: 2px solid var(--dark); padding: 8px 20px; border-radius: 50px; transition: 0.3s; }
+        .logo { font-size: 22px; font-weight: 800; color: var(--dark); text-decoration: none; letter-spacing: -1px; }
+        .btn-site { color: var(--dark); text-decoration: none; font-weight: 600; font-size: 13px; border: 2px solid var(--dark); padding: 6px 16px; border-radius: 50px; transition: 0.3s; }
         .btn-site:hover { background: var(--dark); color: #fff; }
 
-        /* HERO */
-        .hero { text-align: center; padding: 100px 0; background: linear-gradient(180deg, #fff 0%, #F8FAFC 100%); }
-        .hero h1 { font-size: 56px; font-weight: 800; color: var(--dark); margin: 0 0 15px 0; letter-spacing: -2px; line-height: 1.1; }
-        .hero p { font-size: 20px; color: #64748b; max-width: 600px; margin: 0 auto; font-family: 'Merriweather', serif; font-weight: 300; }
+        /* HERO (Mais Compacto) */
+        .hero { text-align: center; padding: 40px 0 20px 0; background: linear-gradient(180deg, #fff 0%, #F8FAFC 100%); }
+        .hero h1 { font-size: 42px; font-weight: 800; color: var(--dark); margin: 0 0 10px 0; letter-spacing: -1.5px; line-height: 1.1; }
+        .hero p { font-size: 16px; color: #64748b; max-width: 600px; margin: 0 auto; font-family: 'Merriweather', serif; font-weight: 300; }
+
+        /* ADSENSE (Espaço Otimizado) */
+        .ad-container { margin: 20px auto 40px; text-align: center; }
+        .ad-banner { background: #e2e8f0; height: 100px; max-width: 728px; margin: 0 auto; display: flex; align-items: center; justify-content: center; color: #94a3b8; border-radius: 8px; font-size: 12px; border: 1px dashed #cbd5e1; }
 
         /* GRID */
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 40px; margin-bottom: 80px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; margin-bottom: 60px; }
         
-        .card { background: var(--card-bg); border-radius: 16px; overflow: hidden; transition: 0.3s; display: flex; flex-direction: column; border: 1px solid #e2e8f0; text-decoration: none; color: inherit; height: 100%; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
-        .card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.08); border-color: var(--green); }
+        .card { background: var(--card-bg); border-radius: 12px; overflow: hidden; transition: 0.3s; display: flex; flex-direction: column; border: 1px solid #e2e8f0; text-decoration: none; color: inherit; height: 100%; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.08); border-color: var(--green); }
         
-        .card-img-wrapper { overflow: hidden; height: 220px; position: relative; }
+        .card-img-wrapper { overflow: hidden; height: 180px; position: relative; }
         .card-img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
         .card:hover .card-img { transform: scale(1.05); }
         
-        .card-body { padding: 30px; flex: 1; display: flex; flex-direction: column; }
-        .date { font-size: 11px; font-weight: 700; color: var(--green); text-transform: uppercase; margin-bottom: 12px; letter-spacing: 1px; display: inline-block; background: rgba(2, 191, 147, 0.1); padding: 4px 8px; border-radius: 4px; }
-        .title { font-size: 22px; font-weight: 700; color: var(--dark); margin: 0 0 15px 0; line-height: 1.3; }
-        .excerpt { font-size: 15px; color: #64748b; margin-bottom: 25px; flex: 1; line-height: 1.6; }
-        .read-more { color: var(--dark); font-weight: 700; font-size: 14px; margin-top: auto; display: flex; align-items: center; gap: 5px; }
+        .card-body { padding: 20px; flex: 1; display: flex; flex-direction: column; }
+        .date { font-size: 10px; font-weight: 700; color: var(--green); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 1px; }
+        .title { font-size: 18px; font-weight: 700; color: var(--dark); margin: 0 0 10px 0; line-height: 1.3; }
+        .excerpt { font-size: 14px; color: #64748b; margin-bottom: 20px; flex: 1; line-height: 1.5; }
+        .read-more { color: var(--dark); font-weight: 700; font-size: 13px; margin-top: auto; display: flex; align-items: center; gap: 5px; }
         .read-more i { transition: 0.3s; }
         .card:hover .read-more i { transform: translateX(5px); color: var(--green); }
 
-        /* ADSENSE */
-        .ad-banner { background: #e2e8f0; height: 120px; margin: 0 auto 60px; max-width: 900px; display: flex; align-items: center; justify-content: center; color: #94a3b8; border-radius: 12px; font-size: 12px; border: 2px dashed #cbd5e1; }
-
         /* FOOTER */
-        footer { background: var(--dark); color: #94a3b8; padding: 80px 0 40px; margin-top: auto; border-top: 4px solid var(--green); text-align: center; }
-        footer h3 { color: #fff; font-size: 24px; margin-bottom: 20px; }
-        .footer-links a { color: #cbd5e1; text-decoration: none; margin: 0 15px; font-weight: 500; transition: 0.3s; }
+        footer { background: var(--dark); color: #94a3b8; padding: 40px 0 20px; margin-top: auto; border-top: 4px solid var(--green); text-align: center; }
+        .footer-links a { color: #cbd5e1; text-decoration: none; margin: 0 15px; font-size: 14px; transition: 0.3s; }
         .footer-links a:hover { color: var(--green); }
-        .copyright { margin-top: 40px; font-size: 13px; opacity: 0.6; border-top: 1px solid #1e293b; padding-top: 20px; }
+        .copyright { margin-top: 20px; font-size: 12px; opacity: 0.6; }
     </style>
 </head>
 <body>
@@ -65,32 +67,30 @@
 
     <div class="hero">
         <div class="container">
-            <h1>O futuro da TI agora.</h1>
-            <p>Notícias, tendências e segurança digital para o seu negócio.</p>
+            <h1>Blog de Tecnologia</h1>
+            <p>Novidades, segurança e infraestrutura de TI.</p>
         </div>
     </div>
 
-    <div class="container">
-        <div class="ad-banner">Espaço Publicitário Google</div>
+    <div class="container ad-container">
+        <div class="ad-banner">Publicidade Google</div>
     </div>
 
     <div class="container">
         <div id="posts" class="grid">
-            <div style="text-align:center;width:100%;color:#999;grid-column:1/-1;padding:40px;">Carregando notícias...</div>
+            <div style="text-align:center;width:100%;color:#999;grid-column:1/-1;padding:40px;">Carregando...</div>
         </div>
     </div>
 
     <footer>
         <div class="container">
-            <h3>KYNTO SOLUÇÕES EM TI</h3>
             <div class="footer-links">
                 <a href="https://kynto.com.br">Home</a>
-                <a href="https://kynto.com.br/sobre">Sobre Nós</a>
-                <a href="https://kynto.com.br/servicos">Serviços</a>
+                <a href="https://kynto.com.br/sobre">Sobre</a>
                 <a href="https://kynto.com.br/contato">Contato</a>
             </div>
             <div class="copyright">
-                &copy; 2026 Kynto Soluções. Todos os direitos reservados.
+                &copy; 2026 Kynto Soluções.
             </div>
         </div>
     </footer>
@@ -110,10 +110,10 @@
                 grid.innerHTML = '';
                 
                 const pub = posts.filter(p => p.status === 'published');
-                if(pub.length === 0) { grid.innerHTML = '<p style="text-align:center;width:100%">Nenhum post encontrado.</p>'; return; }
+                if(pub.length === 0) { grid.innerHTML = '<p style="text-align:center;width:100%">Nenhum post.</p>'; return; }
 
                 pub.forEach(p => {
-                    const img = p.image ? `<img src="${p.image}" class="card-img">` : `<div class="card-img" style="background:#e2e8f0;display:flex;align-items:center;justify-content:center;color:#cbd5e1"><i class="fa-solid fa-image fa-2x"></i></div>`;
+                    const img = p.image ? `<img src="${p.image}" class="card-img">` : `<div class="card-img" style="background:#f1f5f9;display:flex;align-items:center;justify-content:center;color:#cbd5e1"><i class="fa-solid fa-image fa-2x"></i></div>`;
                     
                     grid.innerHTML += `
                         <a href="posts/${p.slug}.html" class="card">
@@ -122,13 +122,13 @@
                                 <div><span class="date">${p.date}</span></div>
                                 <h2 class="title">${p.title}</h2>
                                 <p class="excerpt">${p.snippet}</p>
-                                <div class="read-more">Ler Completo <i class="fa-solid fa-arrow-right"></i></div>
+                                <div class="read-more">Ler Artigo <i class="fa-solid fa-arrow-right"></i></div>
                             </div>
                         </a>
                     `;
                 });
             })
-            .catch(e => document.getElementById('posts').innerHTML = '<p style="color:red;text-align:center">Erro ao carregar notícias.</p>');
+            .catch(e => document.getElementById('posts').innerHTML = '<p style="color:red;text-align:center">Erro.</p>');
     </script>
 
 </body>
