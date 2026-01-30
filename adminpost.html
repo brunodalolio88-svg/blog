@@ -210,37 +210,46 @@
                     ]
                 }
             });
-            // Move o botão para perto da toolbar (estética)
             const toolbar = document.querySelector('.ql-toolbar');
             document.querySelector('.toolbar-wrapper').prepend(toolbar);
 
         } catch(e) { console.error("Erro Quill", e); }
 
         // ===================================
-        // LÓGICA DO EDITOR DE CÓDIGO
+        // LÓGICA BLINDADA DO MODO CÓDIGO
         // ===================================
         function toggleHtmlMode() {
             if (!isHtmlMode) {
-                // Entrar no modo HTML
+                // VISUAL -> HTML
+                // Pega o conteúdo atual do Visual e joga no TextArea
                 const html = quill.root.innerHTML;
                 els.htmlArea.value = html;
                 
+                // Esconde Visual, Mostra Código
                 els.editorDiv.style.display = 'none';
                 document.querySelector('.ql-toolbar').style.display = 'none';
                 els.htmlArea.style.display = 'block';
                 
-                els.btnHtml.innerHTML = '<i class="fa-solid fa-eye"></i>&nbsp; Modo Visual';
-                els.btnHtml.style.background = '#02BF93';
+                // Muda botão
+                els.btnHtml.innerHTML = '<i class="fa-solid fa-eye"></i>&nbsp; Voltar ao Visual (Cuidado)';
+                els.btnHtml.style.background = '#f59e0b'; // Laranja de alerta
                 els.btnHtml.style.color = '#000';
                 isHtmlMode = true;
+                
+                showToast("Modo Código Ativado. Edite à vontade!", "success");
             } else {
-                // Sair do modo HTML
+                // HTML -> VISUAL
+                // AVISO: Se voltar, o Quill vai limpar o código
+                if(!confirm("ATENÇÃO: Se você colou códigos complexos (tabelas, ícones, degradês), o Editor Visual pode removê-los ao voltar.\n\nDeseja continuar mesmo assim?")) {
+                    return; // Cancela a ação
+                }
+
                 const code = els.htmlArea.value;
-                quill.root.innerHTML = code;
+                quill.root.innerHTML = code; // Aqui é onde o Quill "limpa" o código
                 
                 els.htmlArea.style.display = 'none';
                 els.editorDiv.style.display = 'block';
-                document.querySelector('.ql-toolbar').style.display = 'block'; // Block para não quebrar layout
+                document.querySelector('.ql-toolbar').style.display = 'block';
                 
                 els.btnHtml.innerHTML = '<i class="fa-solid fa-code"></i>&nbsp; Código HTML';
                 els.btnHtml.style.background = '#1e293b';
@@ -331,8 +340,17 @@
             document.getElementById('postImage').value = '';
             quill.root.innerHTML = '';
             
-            // Resetar modo código
-            if(isHtmlMode) toggleHtmlMode();
+            // Força reset para Visual ao criar novo
+            if(isHtmlMode) {
+                 isHtmlMode = false;
+                 els.htmlArea.style.display = 'none';
+                 els.editorDiv.style.display = 'block';
+                 document.querySelector('.ql-toolbar').style.display = 'block';
+                 els.btnHtml.innerHTML = '<i class="fa-solid fa-code"></i>&nbsp; Código HTML';
+                 els.btnHtml.style.background = '#1e293b';
+                 els.btnHtml.style.color = '#fff';
+            }
+            els.htmlArea.value = '';
 
             document.getElementById('btnDel').style.display = 'none';
             if(window.innerWidth < 900) toggleMenu();
@@ -345,11 +363,9 @@
             document.getElementById('postTitle').value = p.title;
             document.getElementById('postImage').value = p.image || '';
             
-            // Carrega no editor
+            // Carrega conteúdo
             quill.root.innerHTML = p.content;
-            
-            // Se estiver no modo HTML, atualiza o textarea também
-            if(isHtmlMode) els.htmlArea.value = p.content;
+            els.htmlArea.value = p.content;
 
             document.getElementById('btnDel').style.display = 'block';
             if(window.innerWidth < 900) toggleMenu();
@@ -368,24 +384,29 @@
             
             let manualImg = document.getElementById('postImage').value;
             
-            // CAPTURA CONTEÚDO CORRETO (Se estiver editando código, pega do textarea)
+            // ===============================================
+            // CORREÇÃO CRÍTICA: SELECIONA O CONTEÚDO CERTO
+            // ===============================================
+            // Se estiver no modo HTML, pega do textarea e IGNORA o Quill
+            // Se estiver no modo Visual, pega do Quill normalmente
             let finalContent = isHtmlMode ? els.htmlArea.value : quill.root.innerHTML;
-            
-            // Atualiza o editor visual se salvou direto do modo código
-            if(isHtmlMode) quill.root.innerHTML = finalContent;
 
             if(!manualImg) {
+                // Tenta extrair imagem do conteúdo (mesmo que seja HTML puro)
                 const d = document.createElement('div'); d.innerHTML = finalContent;
                 const img = d.querySelector('img'); if(img) manualImg = img.src;
             }
 
-            const snippet = quill.getText().substring(0, 140).replace(/(\r\n|\n|\r)/gm, " ").trim() + '...';
+            const snippet = d = document.createElement('div');
+            d.innerHTML = finalContent;
+            const textOnly = d.textContent || d.innerText || "";
+            const finalSnippet = textOnly.substring(0, 140).replace(/(\r\n|\n|\r)/gm, " ").trim() + '...';
 
             const postData = {
                 title, slug, status,
                 image: manualImg,
                 date: new Date().toLocaleDateString('pt-BR'),
-                snippet: snippet,
+                snippet: finalSnippet,
                 content: finalContent
             };
 
@@ -408,7 +429,7 @@
         }
 
         // ============================================
-        // TEMPLATE HTML (Final)
+        // TEMPLATE HTML (MANTIDO IGUAL)
         // ============================================
         async function saveHtml(post, token) {
             let htmlSha = null;
