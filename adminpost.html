@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kynto Admin | Post</title>
+    <title>Kynto Admin | HTML Editor</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -50,6 +50,8 @@
         .btn:hover { background:#f8fafc; transform: translateY(-1px); }
         .btn-pub { background:var(--primary); border-color:var(--primary); color:#000; }
         .btn-del { color:var(--danger); border-color:rgba(239,68,68,0.2); }
+        .btn-code { background: #1e293b; color: #fff; border: 1px solid #0f172a; margin-left: 10px; }
+        .btn-code:hover { background: #334155; color: #fff; }
         
         .menu-toggle { display: none; font-size: 20px; cursor: pointer; color: var(--panel); background: none; border: none; margin-right: 15px; }
 
@@ -60,11 +62,30 @@
         .meta-inputs { padding:40px 40px 10px 40px; }
         .input-title { width:100%; font-size:36px; font-weight:800; border:none; outline:none; color:#0f172a; font-family:'Outfit'; margin-bottom:20px; }
         .input-url { width:100%; padding:10px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px; font-size:13px; color:#334155; outline:none; box-sizing: border-box; }
+        
+        .toolbar-wrapper { display: flex; align-items: center; justify-content: space-between; background: #fff; padding: 10px 40px 0 40px; border-radius: 8px 8px 0 0; }
 
-        .ql-toolbar { border:none!important; border-bottom:1px solid #f1f5f9!important; padding:15px 40px!important; position:sticky; top:0; background:#fff; z-index:40; border-radius:8px 8px 0 0; }
+        .ql-toolbar { border:none!important; border-bottom:1px solid #f1f5f9!important; padding:15px 0!important; background:#fff; z-index:40; width: 100%; }
         .ql-container { border:none!important; font-size:18px; font-family:'Merriweather',serif; }
         .ql-editor { padding:40px; color:#1e293b; line-height:1.8; min-height:500px; }
         .ql-editor img { max-width:100%; height:auto; display:block; margin:20px auto; border-radius:8px; }
+
+        /* HTML EDITOR (TEXTAREA) */
+        #htmlEditor { 
+            display: none; 
+            width: 100%; 
+            min-height: 600px; 
+            background: #1e293b; 
+            color: #02BF93; 
+            font-family: 'Courier New', monospace; 
+            padding: 40px; 
+            border: none; 
+            outline: none; 
+            line-height: 1.5; 
+            resize: vertical; 
+            box-sizing: border-box;
+            border-radius: 0 0 8px 8px;
+        }
 
         /* UX: Toast */
         #toast { visibility: hidden; min-width: 250px; background-color: #333; color: #fff; text-align: center; border-radius: 8px; padding: 16px; position: fixed; z-index: 9999; right: 30px; bottom: 30px; font-size: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); display: flex; align-items: center; justify-content: center; gap: 10px; transform: translateY(20px); transition: 0.3s; opacity: 0; }
@@ -72,17 +93,19 @@
         #toast.success { background-color: var(--primary); color: #000; font-weight: 700; }
         #toast.error { background-color: var(--danger); color: #fff; }
 
-        /* Responsive Admin */
+        /* Responsive */
         @media (max-width: 900px) {
             .sidebar { position: fixed; height: 100%; left: -280px; box-shadow: 10px 0 30px rgba(0,0,0,0.5); }
             .sidebar.open { left: 0; }
             .menu-toggle { display: block; }
             .editor-wrapper { padding: 10px; }
             .paper { border-radius: 0; min-height: auto; }
-            .ql-editor { padding: 20px; }
+            .ql-editor, #htmlEditor { padding: 20px; }
             .topbar { padding: 0 15px; }
             .meta-inputs { padding: 20px; }
             .input-title { font-size: 24px; }
+            .toolbar-wrapper { padding: 10px 20px 0 20px; flex-direction: column-reverse; align-items: flex-start; }
+            .btn-code { margin: 0 0 10px 0; width: 100%; justify-content: center; }
         }
     </style>
 </head>
@@ -129,7 +152,17 @@
                     <input type="text" id="postTitle" class="input-title" placeholder="Título do Artigo aqui...">
                     <input type="text" id="postImage" class="input-url" placeholder="URL da Capa (Opcional)">
                 </div>
-                <div id="editor"></div>
+                
+                <div class="toolbar-wrapper">
+                    <button class="btn btn-code" id="btnToggleHtml" onclick="toggleHtmlMode()">
+                        <i class="fa-solid fa-code"></i>&nbsp; Código HTML
+                    </button>
+                </div>
+                
+                <div id="editor-container">
+                    <div id="editor"></div>
+                    <textarea id="htmlEditor" placeholder="Cole seu código HTML aqui..."></textarea>
+                </div>
             </div>
         </div>
     </div>
@@ -145,6 +178,8 @@
         };
 
         let quill, posts = [], sha = null, activeIdx = -1;
+        let isHtmlMode = false; // Controle de estado
+
         const els = {
             login: document.getElementById('login-screen'),
             app: document.getElementById('app'),
@@ -153,7 +188,10 @@
             toast: document.getElementById('toast'),
             toastMsg: document.getElementById('toastMsg'),
             sidebar: document.getElementById('sidebar'),
-            closeMenuBtn: document.getElementById('closeMenuBtn')
+            closeMenuBtn: document.getElementById('closeMenuBtn'),
+            editorDiv: document.getElementById('editor'),
+            htmlArea: document.getElementById('htmlEditor'),
+            btnHtml: document.getElementById('btnToggleHtml')
         };
 
         try {
@@ -172,8 +210,46 @@
                     ]
                 }
             });
+            // Move o botão para perto da toolbar (estética)
+            const toolbar = document.querySelector('.ql-toolbar');
+            document.querySelector('.toolbar-wrapper').prepend(toolbar);
+
         } catch(e) { console.error("Erro Quill", e); }
 
+        // ===================================
+        // LÓGICA DO EDITOR DE CÓDIGO
+        // ===================================
+        function toggleHtmlMode() {
+            if (!isHtmlMode) {
+                // Entrar no modo HTML
+                const html = quill.root.innerHTML;
+                els.htmlArea.value = html;
+                
+                els.editorDiv.style.display = 'none';
+                document.querySelector('.ql-toolbar').style.display = 'none';
+                els.htmlArea.style.display = 'block';
+                
+                els.btnHtml.innerHTML = '<i class="fa-solid fa-eye"></i>&nbsp; Modo Visual';
+                els.btnHtml.style.background = '#02BF93';
+                els.btnHtml.style.color = '#000';
+                isHtmlMode = true;
+            } else {
+                // Sair do modo HTML
+                const code = els.htmlArea.value;
+                quill.root.innerHTML = code;
+                
+                els.htmlArea.style.display = 'none';
+                els.editorDiv.style.display = 'block';
+                document.querySelector('.ql-toolbar').style.display = 'block'; // Block para não quebrar layout
+                
+                els.btnHtml.innerHTML = '<i class="fa-solid fa-code"></i>&nbsp; Código HTML';
+                els.btnHtml.style.background = '#1e293b';
+                els.btnHtml.style.color = '#fff';
+                isHtmlMode = false;
+            }
+        }
+
+        // Auth Logic
         if(localStorage.getItem('gh_token')) els.token.value = localStorage.getItem('gh_token');
 
         document.getElementById('btnLogin').addEventListener('click', () => {
@@ -254,6 +330,10 @@
             document.getElementById('postTitle').value = '';
             document.getElementById('postImage').value = '';
             quill.root.innerHTML = '';
+            
+            // Resetar modo código
+            if(isHtmlMode) toggleHtmlMode();
+
             document.getElementById('btnDel').style.display = 'none';
             if(window.innerWidth < 900) toggleMenu();
             renderList();
@@ -264,7 +344,13 @@
             const p = posts[i];
             document.getElementById('postTitle').value = p.title;
             document.getElementById('postImage').value = p.image || '';
+            
+            // Carrega no editor
             quill.root.innerHTML = p.content;
+            
+            // Se estiver no modo HTML, atualiza o textarea também
+            if(isHtmlMode) els.htmlArea.value = p.content;
+
             document.getElementById('btnDel').style.display = 'block';
             if(window.innerWidth < 900) toggleMenu();
             renderList(document.getElementById('searchPost').value);
@@ -281,8 +367,15 @@
             const slug = title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
             
             let manualImg = document.getElementById('postImage').value;
+            
+            // CAPTURA CONTEÚDO CORRETO (Se estiver editando código, pega do textarea)
+            let finalContent = isHtmlMode ? els.htmlArea.value : quill.root.innerHTML;
+            
+            // Atualiza o editor visual se salvou direto do modo código
+            if(isHtmlMode) quill.root.innerHTML = finalContent;
+
             if(!manualImg) {
-                const d = document.createElement('div'); d.innerHTML = quill.root.innerHTML;
+                const d = document.createElement('div'); d.innerHTML = finalContent;
                 const img = d.querySelector('img'); if(img) manualImg = img.src;
             }
 
@@ -293,7 +386,7 @@
                 image: manualImg,
                 date: new Date().toLocaleDateString('pt-BR'),
                 snippet: snippet,
-                content: quill.root.innerHTML
+                content: finalContent
             };
 
             if(activeIdx > -1) posts[activeIdx] = postData; else { posts.unshift(postData); activeIdx = 0; }
@@ -315,7 +408,7 @@
         }
 
         // ============================================
-        // TEMPLATE HTML (CORREÇÃO DE HIFENIZAÇÃO)
+        // TEMPLATE HTML (Final)
         // ============================================
         async function saveHtml(post, token) {
             let htmlSha = null;
@@ -343,25 +436,19 @@
                 
                 .container { max-width:1140px; margin:0 auto; padding:60px 20px; display:grid; grid-template-columns: 2.5fr 1fr; gap:60px; }
                 
-                /* --- CORREÇÃO DE TÍTULO --- */
                 h1 { 
                     font-family:'Outfit',sans-serif; 
                     font-size:48px; 
                     color:var(--dark); 
                     line-height:1.2; 
                     margin:20px 0 30px 0;
-                    
-                    /* Evita quebra de palavras com hífen */
                     word-wrap: normal;
-                    overflow-wrap: break-word; /* Só quebra se for uma URL gigante */
-                    word-break: normal;        /* Mantém a palavra inteira */
-                    hyphens: none;             /* PROIBIDO HÍFEN */
-                    -webkit-hyphens: none;
-                    -moz-hyphens: none;
+                    overflow-wrap: break-word;
+                    word-break: normal;
+                    hyphens: none;
                 }
 
                 .article-header { margin-bottom:40px; text-align:center; max-width: 900px; margin-left: auto; margin-right: auto; }
-                
                 .cat-tag { background:rgba(2,191,147,0.1); color:var(--primary); padding:6px 12px; border-radius:50px; font-family:'Outfit'; font-size:12px; font-weight:700; text-transform:uppercase; display:inline-block; }
                 
                 .meta { 
@@ -380,24 +467,11 @@
                 }
                 .share-btn { cursor:pointer; color:#02BF93; transition:0.3s; }
 
-                /* MOBILE RESPONSIVO */
                 @media (max-width: 900px) { 
-                    .container { 
-                        grid-template-columns: 1fr; 
-                        gap:30px; 
-                        padding:30px 20px; 
-                        display: block; 
-                        width: 100%; 
-                        box-sizing: border-box; 
-                    } 
-                    h1 { 
-                        font-size: 28px !important; 
-                        line-height: 1.3 !important; 
-                        margin: 15px 0 25px 0; 
-                    }
+                    .container { grid-template-columns: 1fr; gap:30px; padding:30px 20px; display: block; width: 100%; box-sizing: border-box; } 
+                    h1 { font-size: 28px !important; line-height: 1.3 !important; margin: 15px 0 25px 0; }
                     .sidebar { margin-top: 50px; position: static; height: auto; }
                     .meta { flex-wrap: wrap; gap: 15px; }
-                    
                     body, html { overflow-x: hidden; max-width: 100%; }
                 }
 
