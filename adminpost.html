@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kynto Admin | HTML Editor</title>
+    <title>Kynto Admin | Posts</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -178,7 +178,8 @@
         };
 
         let quill, posts = [], sha = null, activeIdx = -1;
-        let isHtmlMode = false; // Controle de estado
+        let isHtmlMode = false; 
+        let isDirty = false; // Variável para saber se mexeu no visual
 
         const els = {
             login: document.getElementById('login-screen'),
@@ -212,6 +213,11 @@
             });
             const toolbar = document.querySelector('.ql-toolbar');
             document.querySelector('.toolbar-wrapper').prepend(toolbar);
+            
+            // Detecta se o usuário digitou algo no visual
+            quill.on('text-change', function() {
+                isDirty = true;
+            });
 
         } catch(e) { console.error("Erro Quill", e); }
 
@@ -220,32 +226,33 @@
         // ===================================
         function toggleHtmlMode() {
             if (!isHtmlMode) {
-                // VISUAL -> HTML
-                // Pega o conteúdo atual do Visual e joga no TextArea
-                const html = quill.root.innerHTML;
-                els.htmlArea.value = html;
+                // INDO PARA MODO CÓDIGO
                 
-                // Esconde Visual, Mostra Código
+                // Truque: Se o usuário NÃO mexeu no visual (isDirty false),
+                // mantemos o valor original do textarea (que tem o código puro, sem limpeza).
+                // Se ele mexeu, pegamos a versão do Quill.
+                if(isDirty) {
+                    els.htmlArea.value = quill.root.innerHTML;
+                }
+
                 els.editorDiv.style.display = 'none';
                 document.querySelector('.ql-toolbar').style.display = 'none';
                 els.htmlArea.style.display = 'block';
                 
-                // Muda botão
                 els.btnHtml.innerHTML = '<i class="fa-solid fa-eye"></i>&nbsp; Voltar ao Visual (Cuidado)';
-                els.btnHtml.style.background = '#f59e0b'; // Laranja de alerta
+                els.btnHtml.style.background = '#f59e0b';
                 els.btnHtml.style.color = '#000';
                 isHtmlMode = true;
                 
-                showToast("Modo Código Ativado. Edite à vontade!", "success");
             } else {
-                // HTML -> VISUAL
-                // AVISO: Se voltar, o Quill vai limpar o código
-                if(!confirm("ATENÇÃO: Se você colou códigos complexos (tabelas, ícones, degradês), o Editor Visual pode removê-los ao voltar.\n\nDeseja continuar mesmo assim?")) {
-                    return; // Cancela a ação
+                // VOLTANDO PARA MODO VISUAL
+                if(!confirm("⚠️ AVISO: Voltar para o modo visual vai remover seus estilos avançados (degradês, ícones, etc).\n\nPara salvar códigos complexos, clique em PUBLICAR sem voltar para o visual.\n\nDeseja voltar mesmo assim e perder a formatação?")) {
+                    return; 
                 }
 
                 const code = els.htmlArea.value;
-                quill.root.innerHTML = code; // Aqui é onde o Quill "limpa" o código
+                quill.root.innerHTML = code; // Aqui o Quill "limpa" o código
+                isDirty = true; // Agora está sujo com a versão do Quill
                 
                 els.htmlArea.style.display = 'none';
                 els.editorDiv.style.display = 'block';
@@ -258,7 +265,6 @@
             }
         }
 
-        // Auth Logic
         if(localStorage.getItem('gh_token')) els.token.value = localStorage.getItem('gh_token');
 
         document.getElementById('btnLogin').addEventListener('click', () => {
@@ -339,9 +345,12 @@
             document.getElementById('postTitle').value = '';
             document.getElementById('postImage').value = '';
             quill.root.innerHTML = '';
-            
-            // Força reset para Visual ao criar novo
+            els.htmlArea.value = '';
+            isDirty = false;
+
+            // Resetar modo código
             if(isHtmlMode) {
+                 // Força visual mas limpo
                  isHtmlMode = false;
                  els.htmlArea.style.display = 'none';
                  els.editorDiv.style.display = 'block';
@@ -350,7 +359,6 @@
                  els.btnHtml.style.background = '#1e293b';
                  els.btnHtml.style.color = '#fff';
             }
-            els.htmlArea.value = '';
 
             document.getElementById('btnDel').style.display = 'none';
             if(window.innerWidth < 900) toggleMenu();
@@ -363,9 +371,16 @@
             document.getElementById('postTitle').value = p.title;
             document.getElementById('postImage').value = p.image || '';
             
-            // Carrega conteúdo
-            quill.root.innerHTML = p.content;
+            // CARREGAMENTO CRÍTICO:
+            // 1. Carrega o conteúdo RAW no textarea (protegido)
             els.htmlArea.value = p.content;
+            
+            // 2. Carrega o conteúdo no Quill (ele vai limpar, mas temos o backup no textarea)
+            quill.root.innerHTML = p.content;
+            
+            // 3. Marca como "limpo" (não mexido)
+            // Se o usuário clicar em "Código" agora, ele vai ver o conteúdo RAW do textarea, não o do Quill.
+            setTimeout(() => { isDirty = false; }, 100); 
 
             document.getElementById('btnDel').style.display = 'block';
             if(window.innerWidth < 900) toggleMenu();
@@ -384,29 +399,24 @@
             
             let manualImg = document.getElementById('postImage').value;
             
-            // ===============================================
-            // CORREÇÃO CRÍTICA: SELECIONA O CONTEÚDO CERTO
-            // ===============================================
-            // Se estiver no modo HTML, pega do textarea e IGNORA o Quill
-            // Se estiver no modo Visual, pega do Quill normalmente
+            // SELEÇÃO INTELIGENTE DE CONTEÚDO
+            // Se estiver no modo HTML, confia 100% no textarea.
             let finalContent = isHtmlMode ? els.htmlArea.value : quill.root.innerHTML;
 
             if(!manualImg) {
-                // Tenta extrair imagem do conteúdo (mesmo que seja HTML puro)
                 const d = document.createElement('div'); d.innerHTML = finalContent;
                 const img = d.querySelector('img'); if(img) manualImg = img.src;
             }
 
-            const snippet = d = document.createElement('div');
-            d.innerHTML = finalContent;
+            const d = document.createElement('div'); d.innerHTML = finalContent;
             const textOnly = d.textContent || d.innerText || "";
-            const finalSnippet = textOnly.substring(0, 140).replace(/(\r\n|\n|\r)/gm, " ").trim() + '...';
+            const snippet = textOnly.substring(0, 140).replace(/(\r\n|\n|\r)/gm, " ").trim() + '...';
 
             const postData = {
                 title, slug, status,
                 image: manualImg,
                 date: new Date().toLocaleDateString('pt-BR'),
-                snippet: finalSnippet,
+                snippet: snippet,
                 content: finalContent
             };
 
@@ -428,9 +438,6 @@
             finally { setLoading(false, btnId); }
         }
 
-        // ============================================
-        // TEMPLATE HTML (MANTIDO IGUAL)
-        // ============================================
         async function saveHtml(post, token) {
             let htmlSha = null;
             try {
@@ -454,38 +461,12 @@
                 header{background:#fff;padding:20px 0;border-bottom:1px solid #e2e8f0;position:sticky;top:0;z-index:900}
                 .logo{color:var(--dark);font-family:'Outfit',sans-serif;font-weight:800;font-size:24px;text-decoration:none;display:block;text-align:center}
                 .logo span{color:var(--primary)}
-                
                 .container { max-width:1140px; margin:0 auto; padding:60px 20px; display:grid; grid-template-columns: 2.5fr 1fr; gap:60px; }
                 
-                h1 { 
-                    font-family:'Outfit',sans-serif; 
-                    font-size:48px; 
-                    color:var(--dark); 
-                    line-height:1.2; 
-                    margin:20px 0 30px 0;
-                    word-wrap: normal;
-                    overflow-wrap: break-word;
-                    word-break: normal;
-                    hyphens: none;
-                }
-
+                h1 { font-family:'Outfit',sans-serif; font-size:48px; color:var(--dark); line-height:1.2; margin:20px 0 30px 0; word-wrap: normal; overflow-wrap: break-word; word-break: normal; hyphens: none; }
                 .article-header { margin-bottom:40px; text-align:center; max-width: 900px; margin-left: auto; margin-right: auto; }
                 .cat-tag { background:rgba(2,191,147,0.1); color:var(--primary); padding:6px 12px; border-radius:50px; font-family:'Outfit'; font-size:12px; font-weight:700; text-transform:uppercase; display:inline-block; }
-                
-                .meta { 
-                    font-family:'Outfit',sans-serif; 
-                    color:#64748b; 
-                    font-size:14px; 
-                    display:flex; 
-                    align-items:center; 
-                    justify-content:center; 
-                    gap:25px; 
-                    border-top:1px solid #eee; 
-                    border-bottom:1px solid #eee; 
-                    padding:25px 0;   
-                    margin-top:35px;  
-                    margin-bottom:20px;
-                }
+                .meta { font-family:'Outfit',sans-serif; color:#64748b; font-size:14px; display:flex; align-items:center; justify-content:center; gap:25px; border-top:1px solid #eee; border-bottom:1px solid #eee; padding:25px 0; margin-top:35px; margin-bottom:20px; }
                 .share-btn { cursor:pointer; color:#02BF93; transition:0.3s; }
 
                 @media (max-width: 900px) { 
@@ -497,16 +478,8 @@
                 }
 
                 .content { font-size:18px; color:#1e293b; overflow-wrap: break-word; word-wrap: break-word; word-break: break-word; }
-                .content img, .content video, .content iframe { 
-                    max-width: 100% !important; 
-                    height: auto !important; 
-                    border-radius:12px; 
-                    margin:30px 0; 
-                    display:block; 
-                    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-                }
+                .content img, .content video, .content iframe { max-width: 100% !important; height: auto !important; border-radius:12px; margin:30px 0; display:block; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
                 .content p { margin-bottom: 24px; }
-
                 .sidebar { position:sticky; top:100px; height:fit-content; }
                 .widget-title { font-family:'Outfit'; font-size:14px; font-weight:800; text-transform:uppercase; color:#94a3b8; letter-spacing:1px; margin-bottom:20px; display:block; }
                 .news-card { background:#fff; padding:20px; border-radius:12px; margin-bottom:15px; border:1px solid #e2e8f0; transition:0.3s; display:block; text-decoration:none; }
