@@ -6,29 +6,39 @@
                 :root { --primary: #02BF93; --dark: #0f172a; --bg: #f8fafc; }
                 body{font-family:'Merriweather',serif;margin:0;color:#334155;background:var(--bg);line-height:1.9}
                 #progress-bar { position:fixed; top:0; left:0; width:0%; height:4px; background:var(--primary); z-index:1000; transition:width 0.1s; }
+                
                 header{background:#fff;padding:20px 0;border-bottom:1px solid #e2e8f0;position:sticky;top:0;z-index:900}
                 .logo{color:var(--dark);font-family:'Outfit',sans-serif;font-weight:800;font-size:24px;text-decoration:none;display:block;text-align:center}
                 .logo span{color:var(--primary)}
+                
                 .container { max-width:1140px; margin:0 auto; padding:40px 20px; display:grid; grid-template-columns: 2.5fr 1fr; gap:60px; }
-                .article-header { margin-bottom:40px; text-align:center; }
+                .article-header { margin-bottom:20px; text-align:center; }
                 .cat-tag { background:rgba(2,191,147,0.1); color:var(--primary); padding:6px 12px; border-radius:50px; font-family:'Outfit'; font-size:12px; font-weight:700; text-transform:uppercase; display:inline-block; margin-bottom:15px; }
                 h1 { font-family:'Outfit',sans-serif; font-size:42px; color:var(--dark); line-height:1.1; margin:0 0 20px 0; }
-                .meta { font-family:'Outfit',sans-serif; color:#64748b; font-size:14px; display:flex; align-items:center; justify-content:center; gap:20px; }
-                .main-img { width:100%; height:auto; border-radius:16px; margin-bottom:40px; }
+                .meta { font-family:'Outfit',sans-serif; color:#64748b; font-size:14px; display:flex; align-items:center; justify-content:center; gap:20px; border-bottom:1px solid #eee; padding-bottom:30px; margin-bottom:40px; }
+                
                 .content { font-size:18px; color:#1e293b; }
                 .content img { max-width:100%; height:auto; border-radius:12px; margin:30px 0; display:block; }
+                
                 .sidebar { position:sticky; top:100px; height:fit-content; }
                 .widget-title { font-family:'Outfit'; font-size:14px; font-weight:800; text-transform:uppercase; color:#94a3b8; letter-spacing:1px; margin-bottom:20px; display:block; }
                 .news-card { background:#fff; padding:20px; border-radius:12px; margin-bottom:15px; border:1px solid #e2e8f0; transition:0.3s; display:block; text-decoration:none; }
                 .news-card:hover { transform:translateY(-3px); border-color:var(--primary); }
                 .nc-title { font-family:'Outfit'; font-weight:700; font-size:16px; color:var(--dark); }
                 .nc-date { font-size:12px; color:#94a3b8; margin-top:8px; display:block; }
+                
+                /* BOTÃO TOP */
+                #btnTop { display:none; position:fixed; bottom:20px; left:20px; z-index:99; border:none; outline:none; background:var(--primary); color:#000; cursor:pointer; padding:15px; border-radius:50%; width:50px; height:50px; font-size:18px; box-shadow:0 4px 10px rgba(0,0,0,0.2); transition:0.3s; }
+                #btnTop:hover { background:var(--dark); color:#fff; transform:translateY(-3px); }
+
                 footer { background:var(--dark); color:#94a3b8; text-align:center; padding:80px 0; margin-top:80px; font-family:'Outfit'; }
                 footer a { color:#fff; text-decoration:none; margin:0 15px; }
                 @media(max-width:900px) { .container{grid-template-columns:1fr;} }
             </style></head>
             <body>
                 <div id="progress-bar"></div>
+                <button onclick="topFunction()" id="btnTop" title="Ir ao topo"><i class="fa-solid fa-arrow-up"></i></button>
+
                 <header><a href="../index.html" class="logo">KYNTO<span>BLOG</span></a></header>
                 <div class="container">
                     <article>
@@ -40,10 +50,10 @@
                                 <span><i class="fa-regular fa-clock"></i> 3 min leitura</span>
                             </div>
                         </header>
-                        <img src="https://media.kingston.com/kingston/lifestyle/ktc-lifestyle-blog-pc-performance-top-reasons-upgrade-nvme-ssd.jpg" class="main-img">
-                        <div style="background:#f1f5f9;padding:20px;text-align:center;color:#999;margin-bottom:30px">Publicidade Google (Topo)</div>
+                        
+                        <div style="background:#f1f5f9;padding:20px;text-align:center;color:#999;margin-bottom:30px;border-radius:8px">Publicidade Google (Topo)</div>
                         <div class="content"><h3><img src="https://media.kingston.com/kingston/lifestyle/ktc-lifestyle-blog-pc-performance-top-reasons-upgrade-nvme-ssd.jpg"></h3><h3>Vale a pena atualizar para um SSD NVMe?</h3><p>Resposta curta: sim, vale! Os SSDs NVMe instalados em um dispositivo compatível fornecem melhorias significativas de velocidade em relação aos SSDs SATA e podem melhorar o desempenho geral do seu PC. Atualizar seu PC ou laptop ao invés de substituí-lo pode dar nova vida à sua máquina por um custo muito menor. Por que não começar fazendo upgrade para uma unidade NVMe? As unidades NVMe estão rapidamente se tornando o novo padrão para as mais altas taxas de transferência de dados possível.</p><p>Se você ainda está se atualizando sobre as diferenças do SSD, nossos artigos&nbsp;<a href="https://www.kingston.com/br/blog/pc-performance/nvme-vs-sata" target="_blank" style="color: rgb(13, 72, 145);">NVMe vs SATA: Qual é a diferença?</a>&nbsp;e&nbsp;<a href="https://www.kingston.com/br/blog/pc-performance/two-types-m2-vs-ssd" target="_blank" style="color: rgb(13, 72, 145);">2 tipos de SSDs M.2: SATA e NVMe</a>&nbsp;são bons explicadores. Caso contrário, vamos diretamente para nossos 6 principais razões para atualizar para um SSD NVMe.</p><p><br></p><p>1. Aumento da velocidade</p><p>Em comparação com HDDs (drives de disco rígido), os SSDs (drives de estado sólido) já estão em outra liga em relação a velocidades de leitura e gravação. Mas eles ficam ainda mais rápidos ao usar uma interface NVMe. SSDs NVMe de alta tecnologia, como o&nbsp;<a href="https://www.kingston.com/br/ssd/kc3000-nvme-m2-solid-state-drive" target="_blank" style="color: rgb(13, 72, 145);">SSD KC3000 da Kingston</a>, são capazes de aproximadamente 7.000MB/s, o que é até doze vezes mais rápido do que um equivalente baseado em SATA. O aumento das velocidades de leitura e gravação de um drive NVMe beneficiará o seu PC, melhorando os tempos de carregamento de arquivos e de inicialização.</p><p><br></p><p>2. Desempenho aprimorado</p><p>Os SSDs NVMe permitem que vinte e cinco vezes mais dados sejam transferidos em comparação com drives SATA. A atualização para uma unidade NVMe removerá quaisquer gargalos de armazenamento e melhorará o fluxo de trabalho geral do seu PC.</p><p><br></p><p>3. Eficiência de energia superior</p><p>Os SSDs NVMe têm baixo consumo de energia no modo de espera, o que proporciona um desempenho mais eficiente em termos de energia.</p><p><br></p><p><br></p><p>4. Compatibilidade avançada</p><p>Você não precisará se preocupar com a compatibilidade, pois os SSDs NVMe funcionam com todos os principais sistemas operacionais e sistemas lançados após 2015, comunicando-se diretamente com a CPU através do barramento PCIe. A maioria dos SSDs NVMe também usa o formato M.2, tornando-os compatíveis com laptops e mini-PCs.</p><p><br></p><p>5. Benefícios para jogos</p><p>Seu PC de jogos também verá os benefícios da atualização para um SSD NVMe. Você notará um tempo de inicialização e carregamento mais rápido do jogo e tempos de instalação reduzidos. Além disso, a tecnologia NVMe irá lidar com o aumento das taxas de quadros dos maiores e mais recentes jogos. Com a introdução do Microsoft DirectStorage e sua implementação mais ampla nos próximos jogos, o NVMe se torna um ativo indispensável para os jogos. Leia mais sobre os&nbsp;<a href="https://www.kingston.com/br/blog/gaming/gaming-ssd" target="_blank" style="color: rgb(13, 72, 145);">benefícios do SSD para jogar</a>.</p><p><br></p><p>6. Pronto para PS5&nbsp;™</p><p>Se você não tiver um PC, todos os motivos acima ainda são válidos para atualizar seu armazenamento de PS5. Atualize para o&nbsp;<a href="https://www.kingston.com/br/ssd/gaming/kingston-fury-renegade-nvme-m2-ssd" target="_blank" style="color: rgb(13, 72, 145);">SSD Kingston FURY™&nbsp;Renegade</a>&nbsp;com o modelo de dissipador de calor e obtenha mais armazenamento para todos os seus jogos de PS5. E aqui está como você pode&nbsp;<a href="https://www.kingston.com/br/blog/gaming/ps5-ssd-nvme-m2-install" target="_blank" style="color: rgb(13, 72, 145);">instalar um SSD NVMe no seu PlayStation®5</a>.</p><h3>O que você está esperando?</h3><p>Upgrade em vez de substituir o SSD é uma ótima maneira de aumentar o desempenho geral do seu PC. Você pode até usar o SSD antigo como uma unidade de armazenamento externo para tirar o máximo proveito do seu hardware. Curioso? Nós te orientamos em nosso artigo&nbsp;<a href="https://www.kingston.com/br/blog/personal-storage/use-your-old-ssd-as-external-storage" target="_blank" style="color: rgb(13, 72, 145);">Como usar seu SSD antigo como um drive de armazenamento externo</a>.</p></div>
-                        <div style="background:#f1f5f9;padding:20px;text-align:center;color:#999;margin-top:30px">Publicidade Google (Fim)</div>
+                        <div style="background:#f1f5f9;padding:20px;text-align:center;color:#999;margin-top:30px;border-radius:8px">Publicidade Google (Fim)</div>
                     </article>
                     <aside class="sidebar">
                         <span class="widget-title">Últimas Notícias</span>
@@ -56,11 +66,24 @@
                     <div style="margin-top:20px"><a href="https://kynto.com.br">Home</a> <a href="../index.html">Blog</a></div>
                 </footer>
                 <script>
+                    // Scroll Progress & Button Visibility
                     window.onscroll = function() {
                         var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
                         var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
                         document.getElementById("progress-bar").style.width = (winScroll / height) * 100 + "%";
+                        
+                        // Show/Hide Button
+                        if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                            document.getElementById("btnTop").style.display = "block";
+                        } else {
+                            document.getElementById("btnTop").style.display = "none";
+                        }
                     };
+
+                    function topFunction() {
+                        window.scrollTo({top: 0, behavior: 'smooth'});
+                    }
+
                     fetch('../db.json').then(r=>r.json()).then(p=>{
                         const c=document.getElementById('sidebar-news');c.innerHTML='';
                         const o=p.filter(x=>x.slug!=='top-6-razoes-para-atualizar-para-um-ssd-nvme'&&x.status==='published').slice(0,5);
