@@ -1,4 +1,6 @@
-<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>O que é Cloud Server?</title>
+<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+            <title>O que é Cloud Server?</title>
+            <meta name="description" content=" Cloud server é um serviço de computação em nuvem que permite a ativação facilitada de servidores virtuais para você migrar ou rodar aplicações na nuv...">
             <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1879074686301515" crossorigin="anonymous"></script>
             <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;800&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -16,6 +18,7 @@
                 .cat-tag { background:rgba(2,191,147,0.1); color:var(--primary); padding:6px 12px; border-radius:50px; font-family:'Outfit'; font-size:12px; font-weight:700; text-transform:uppercase; display:inline-block; margin-bottom:15px; }
                 h1 { font-family:'Outfit',sans-serif; font-size:42px; color:var(--dark); line-height:1.1; margin:0 0 20px 0; }
                 .meta { font-family:'Outfit',sans-serif; color:#64748b; font-size:14px; display:flex; align-items:center; justify-content:center; gap:20px; border-bottom:1px solid #eee; padding-bottom:30px; margin-bottom:40px; }
+                .share-btn { cursor:pointer; color:#02BF93; transition:0.3s; } .share-btn:hover { transform:scale(1.2); }
                 
                 .content { font-size:18px; color:#1e293b; }
                 .content img { max-width:100%; height:auto; border-radius:12px; margin:30px 0; display:block; }
@@ -27,7 +30,6 @@
                 .nc-title { font-family:'Outfit'; font-weight:700; font-size:16px; color:var(--dark); }
                 .nc-date { font-size:12px; color:#94a3b8; margin-top:8px; display:block; }
                 
-                /* BOTÃO TOP */
                 #btnTop { display:none; position:fixed; bottom:20px; left:20px; z-index:99; border:none; outline:none; background:var(--primary); color:#000; cursor:pointer; padding:15px; border-radius:50%; width:50px; height:50px; font-size:18px; box-shadow:0 4px 10px rgba(0,0,0,0.2); transition:0.3s; }
                 #btnTop:hover { background:var(--dark); color:#fff; transform:translateY(-3px); }
 
@@ -47,18 +49,28 @@
                             <h1>O que é Cloud Server?</h1>
                             <div class="meta">
                                 <span><i class="fa-regular fa-calendar"></i> 29/01/2026</span>
-                                <span><i class="fa-regular fa-clock"></i> 2 min leitura</span>
+                                <span><i class="fa-regular fa-clock"></i> 2 min</span>
+                                <span class="share-btn" onclick="sharePost()" title="Compartilhar"><i class="fa-solid fa-share-nodes"></i></span>
                             </div>
                         </header>
                         
-                        <div style="background:#f1f5f9;padding:20px;text-align:center;color:#999;margin-bottom:30px;border-radius:8px">Publicidade Google (Topo)</div>
+                        <div style="background:#f1f5f9;padding:20px;text-align:center;color:#999;margin-bottom:30px;border-radius:8px">
+                             Publicidade Google
+                        </div>
+                        
                         <div class="content"><p><img src="https://images.unsplash.com/photo-1667984390553-7f439e6ae401?fm=jpg&amp;q=60&amp;w=3000&amp;auto=format&amp;fit=crop&amp;ixlib=rb-4.1.0&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="uma imagem gerada por computador de um computador"></p><p>Cloud server é um serviço de computação em nuvem que permite a ativação facilitada de servidores virtuais para você migrar ou rodar aplicações na nuvem com alta confiabilidade.</p><p>Através de um painel de autosserviço, criado para simplificar o gerenciamento e a análise do consumo de recursos, você ativa ou remove servidores, gera imagens e pontos de restauração, configura backups, acessa o terminal e os dados de monitoramento.</p><p>Conheça os principais componentes:</p><ul><li><strong><em>Software de gerenciamento em nuvem</em></strong>, composto por programas como&nbsp;<strong>VMware</strong>,&nbsp;<strong>Nutanix</strong>&nbsp;e&nbsp;<strong>Proxmox</strong>;</li><li><strong><em>Software de virtualização</em></strong>, como o&nbsp;<a href="https://www.centralserver.com/cloud-servers/" target="_blank" style="color: rgb(43, 108, 176); background-color: rgba(0, 0, 0, 0);"><strong>hypervisor KVM</strong></a>, com recursos de alta disponibilidade de recursos, alocação simplificada, troca de servidores sem parada, switch virtual, controle de memória, processamento, espaço em disco, IOPS, entre outros;</li><li><strong><em>Alocação dinâmica dos cloud servers no cluster de hospedeiros</em></strong>, para garantir o pleno acesso à capacidade computacional contratada;</li><li><strong>Servidores hospedeiros</strong>, com alta capacidade de processamento e memória e baixo consumo de energia;</li><li><strong><em>Camada de storage SSD virtualizada (Ceph)</em></strong>, com redundância total e expansão transparente de capacidade;</li><li><strong><em>Hardware de rede e conexões redundantes</em></strong>.</li></ul><p>O software de virtualização realiza a alocação dos recursos computacionais dos hospdeiros de forma exclusiva e isolada para os cloud servers.</p><p>Em cada hospedeiro físico há recursos computacionais disponíveis (CPU, memória, disco e rede) usados pelos cloud servers. Caso um hospedeiro apresente falha, um mecanismo de alta disponibilidade entra em ação e reinicia automaticamente os cloud servers em um novo equipamento.</p><p>Esta infraestrutura oferece servidores na nuvem com facilidade de expansão e suporte a aplicações que demandem alta capacidade computacional e performance.</p><p>Quer saber mais? Então veja este artigo que mostra a&nbsp;<a href="https://blog.centralserver.com.br/sera-que-voce-precisa-de-um-cloud-server-ou-de-um-vps/" target="_blank" style="color: rgb(43, 108, 176); background-color: rgba(0, 0, 0, 0);">diferença entre Cloud Servers e VPS</a>.</p><p>E a aproveite para conhecer os&nbsp;<a href="https://www.centralserver.com/cloud-servers/" target="_blank" style="color: rgb(43, 108, 176); background-color: rgba(0, 0, 0, 0);">KVM Servers</a>, a solução de cloud servers de alto desempenho e confiablidade fornecida no Brasil pela&nbsp;<strong>CentralServer</strong>.</p></div>
-                        <div style="background:#f1f5f9;padding:20px;text-align:center;color:#999;margin-top:30px;border-radius:8px">Publicidade Google (Fim)</div>
+                        
+                        <div style="background:#f1f5f9;padding:20px;text-align:center;color:#999;margin-top:30px;border-radius:8px">
+                             Publicidade Google
+                        </div>
                     </article>
                     <aside class="sidebar">
                         <span class="widget-title">Últimas Notícias</span>
                         <div id="sidebar-news">Carregando...</div>
-                        <div style="background:#e2e8f0;height:300px;border-radius:12px;margin-top:40px;display:flex;align-items:center;justify-content:center;color:#999">Publicidade Vertical</div>
+                        
+                        <div style="background:#e2e8f0;height:300px;border-radius:12px;margin-top:40px;display:flex;align-items:center;justify-content:center;color:#999">
+                             Publicidade Vertical
+                        </div>
                     </aside>
                 </div>
                 <footer>
@@ -66,22 +78,24 @@
                     <div style="margin-top:20px"><a href="https://kynto.com.br">Home</a> <a href="../index.html">Blog</a></div>
                 </footer>
                 <script>
-                    // Scroll Progress & Button Visibility
                     window.onscroll = function() {
                         var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
                         var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
                         document.getElementById("progress-bar").style.width = (winScroll / height) * 100 + "%";
-                        
-                        // Show/Hide Button
                         if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
                             document.getElementById("btnTop").style.display = "block";
-                        } else {
-                            document.getElementById("btnTop").style.display = "none";
-                        }
+                        } else { document.getElementById("btnTop").style.display = "none"; }
                     };
-
-                    function topFunction() {
-                        window.scrollTo({top: 0, behavior: 'smooth'});
+                    function topFunction() { window.scrollTo({top: 0, behavior: 'smooth'}); }
+                    
+                    function sharePost() {
+                        if (navigator.share) {
+                            navigator.share({ title: 'O que é Cloud Server?', url: window.location.href })
+                            .catch(console.error);
+                        } else {
+                            navigator.clipboard.writeText(window.location.href);
+                            alert('Link copiado!');
+                        }
                     }
 
                     fetch('../db.json').then(r=>r.json()).then(p=>{
