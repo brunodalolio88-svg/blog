@@ -1,7 +1,9 @@
 <!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-            <title>${post.title}</title>
-            <meta name="description" content="${post.snippet}">
+            <title>tsesterte333</title>
+            <meta name="description" content="...">
+            
             <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1879074686301515" crossorigin="anonymous"></script>
+            
             <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;800&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
             <style>
@@ -48,10 +50,10 @@
                     <article>
                         <header class="article-header">
                             <span class="cat-tag">Tecnologia</span>
-                            <h1>${post.title}</h1>
+                            <h1>tsesterte333</h1>
                             <div class="meta">
-                                <span><i class="fa-regular fa-calendar"></i> ${post.date}</span>
-                                <span><i class="fa-regular fa-clock"></i> ${readTime} min leitura</span>
+                                <span><i class="fa-regular fa-calendar"></i> 04/02/2026</span>
+                                <span><i class="fa-regular fa-clock"></i> 1 min leitura</span>
                                 <span class="share-btn" onclick="sharePost()" title="Compartilhar"><i class="fa-solid fa-share-nodes"></i> Compartilhar</span>
                             </div>
                         </header>
@@ -61,7 +63,13 @@
                             <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
                         </div>
 
-                        <div class="content">${post.content}</div>
+                        <div class="content"><p><img src="https://kynto.com.br/kynto_hero.png" width="642" style=""></p><p>
+
+
+</p><p><br></p><p>
+</p><p><br></p><p>
+
+</p><p><br></p></div>
 
                         <div style="margin: 30px 0;">
                             <ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-1879074686301515" data-ad-slot="3320621577"></ins>
@@ -79,8 +87,8 @@
                         <div id="sidebar-news">Carregando...</div>
                         
                         <div style="margin-top:40px;">
-                             <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1879074686301515" data-ad-slot="6062334980" data-ad-format="auto" data-full-width-responsive="true"></ins>
-                             <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+                            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1879074686301515" data-ad-slot="6062334980" data-ad-format="auto" data-full-width-responsive="true"></ins>
+                            <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
                         </div>
 
                     </aside>
@@ -98,12 +106,12 @@
                     };
                     function topFunction() { window.scrollTo({top: 0, behavior: 'smooth'}); }
                     function sharePost() {
-                        if (navigator.share) { navigator.share({ title: '${post.title}', url: window.location.href }).catch(console.error); } 
+                        if (navigator.share) { navigator.share({ title: 'tsesterte333', url: window.location.href }).catch(console.error); } 
                         else { navigator.clipboard.writeText(window.location.href); alert('Link copiado!'); }
                     }
                     fetch('../db.json').then(r=>r.json()).then(p=>{
                         const c=document.getElementById('sidebar-news');c.innerHTML='';
-                        const o=p.filter(x=>x.slug!=='${post.slug}'&&x.status==='published').slice(0,5);
+                        const o=p.filter(x=>x.slug!=='tsesterte333'&&x.status==='published').slice(0,5);
                         o.forEach(i=>{c.innerHTML+= `<a href="${i.slug}.html" class="news-card"><div class="nc-title">${i.title}</div><span class="nc-date">${i.date}</span></a>`});
                     });
                 </script></body></html>
